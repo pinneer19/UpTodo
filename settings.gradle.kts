@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "UpTodo"
 include(":app")
+include(":domain")
