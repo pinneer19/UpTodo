@@ -1,9 +1,7 @@
 package dev.uptodo.domain.model
 
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Task(
     val name: String,
     val description: String,

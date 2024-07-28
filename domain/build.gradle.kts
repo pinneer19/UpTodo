@@ -9,7 +9,7 @@ java {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
+    api(libs.kotlinx.datetime)
     implementation(libs.junit)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
