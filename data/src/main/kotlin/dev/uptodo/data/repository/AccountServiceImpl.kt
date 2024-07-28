@@ -1,4 +1,4 @@
-package dev.uptodo.data.firebase
+package dev.uptodo.data.repository
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

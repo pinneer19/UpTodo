@@ -1,0 +1,10 @@
+Grocery, Icons.Default.ShoppingCart, #FF6347
+Work, Icons.Default.Work, #4682B4
+Sport, Icons.Default.FitnessCenter, #32CD32
+Design, Icons.Default.Palette, #FF69B4
+University, Icons.Default.School, #8A2BE2
+Social, Icons.Default.People, #FFD700
+Music, Icons.Default.MusicNote, #FF4500
+Health, Icons.Default.HealthAndSafety, #008080
+Movie, Icons.Default.Movie, #B22222
+Home, Icons.Default.Home, #2E8B57

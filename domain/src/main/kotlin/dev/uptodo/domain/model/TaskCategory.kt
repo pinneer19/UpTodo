@@ -10,19 +10,3 @@ data class TaskCategory(
     val iconUri: String,
     val iconTint: String // hex
 )
-
-val TaskCategory.json: String
-    get() = Json.encodeToString(this)
-
-//enum class TaskCategory {
-//    Grocery,
-//    Work,
-//    Sport,
-//    Design,
-//    University,
-//    Social,
-//    Music,
-//    Health,
-//    Movie,
-//    Home
-//}

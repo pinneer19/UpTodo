@@ -1,7 +1,12 @@
 package dev.uptodo.domain.usecase
 
-class DeleteTaskUseCase {
-    operator fun invoke() {
-        // TODO
+import dev.uptodo.domain.repository.OfflineTaskRepository
+import javax.inject.Inject
+
+class DeleteTaskUseCase @Inject constructor(
+    private val repository: OfflineTaskRepository
+) {
+    suspend operator fun invoke(id: String): Result<Unit> {
+        return repository.deleteTask(id)
     }
 }

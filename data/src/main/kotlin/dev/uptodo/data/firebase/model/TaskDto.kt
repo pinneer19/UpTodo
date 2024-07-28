@@ -1,8 +1,5 @@
-package dev.uptodo.data.model
+package dev.uptodo.data.firebase.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
 import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskCategory
@@ -13,16 +10,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-@Entity(foreignKeys = [
-    ForeignKey(
-        entity = TaskCategoryDto::class,
-        parentColumns = ["id"],
-        childColumns = ["categoryId"],
-        onDelete = ForeignKey.CASCADE
-    )
-])
 internal data class TaskDto(
-    @PrimaryKey(autoGenerate = false) val id: String,
+    val id: String,
     val name: String,
     val description: String,
     val priority: TaskPriority,

@@ -1,17 +1,17 @@
-package dev.uptodo.data.model
+package dev.uptodo.data.local.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import dev.uptodo.data.local.util.toTaskCategory
 import dev.uptodo.domain.model.Task
 
-
-internal data class TaskWithCategory(
-    @Embedded val task: TaskDto,
+data class TaskWithCategory(
+    @Embedded val task: TaskEntity,
     @Relation(
         parentColumn = "categoryId",
         entityColumn = "id"
     )
-    val category: TaskCategoryDto
+    val category: TaskCategoryEntity
 ) {
     fun toTask() = Task(
         name = task.name,

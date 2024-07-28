@@ -7,7 +7,6 @@ import dev.uptodo.domain.model.TaskPriority
 import kotlinx.datetime.LocalDateTime
 
 interface TaskRepository {
-
     suspend fun getTasks(): Result<Map<String, Task>>
 
     suspend fun createTask(
@@ -23,3 +22,7 @@ interface TaskRepository {
 
     suspend fun updateTask(id: String, categoryId: String, task: Task): Result<Unit>
 }
+
+interface OfflineTaskRepository : TaskRepository
+
+interface RemoteTaskRepository : TaskRepository

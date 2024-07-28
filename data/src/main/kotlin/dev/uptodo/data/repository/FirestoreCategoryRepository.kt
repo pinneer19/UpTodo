@@ -1,20 +1,22 @@
-package dev.uptodo.data.firebase
+package dev.uptodo.data.repository
 
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.uptodo.data.model.TaskCategoryDto
+import dev.uptodo.data.firebase.model.TaskCategoryDto
 import dev.uptodo.data.util.getResult
 import dev.uptodo.domain.model.TaskCategory
-import dev.uptodo.domain.model.json
-import dev.uptodo.domain.repository.TaskCategoryRepository
+import dev.uptodo.domain.repository.RemoteTaskCategoryRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirestoreTaskCategoryRepositoryImpl @Inject constructor(
-    private val firebaseDb: FirebaseFirestore
-) : TaskCategoryRepository {
+class FirestoreTaskCategoryRepository @Inject constructor(
+    private val userDocumentRef: DocumentReference
+) : RemoteTaskCategoryRepository {
     override suspend fun getTaskCategories(): Result<Map<String, TaskCategory>> {
         return getResult<Map<String, TaskCategory>> {
-            firebaseDb
+           userDocumentRef
                 .collection(TASK_CATEGORY_COLLECTION)
                 .get()
                 .await()
@@ -35,7 +37,7 @@ class FirestoreTaskCategoryRepositoryImpl @Inject constructor(
         iconTint: String
     ): Result<String> {
         return getResult<String> {
-            val docRef = firebaseDb.collection(TASK_CATEGORY_COLLECTION).document()
+            val docRef = userDocumentRef.collection(TASK_CATEGORY_COLLECTION).document()
 
             docRef.set(
                 TaskCategoryDto(
@@ -51,7 +53,7 @@ class FirestoreTaskCategoryRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTaskCategory(id: String): Result<Unit> {
         return getResult {
-            firebaseDb.collection(TASK_CATEGORY_COLLECTION)
+            userDocumentRef.collection(TASK_CATEGORY_COLLECTION)
                 .document(id)
                 .delete()
                 .await()
@@ -63,7 +65,7 @@ class FirestoreTaskCategoryRepositoryImpl @Inject constructor(
         taskCategory: TaskCategory
     ): Result<Unit> {
         return getResult {
-            firebaseDb.collection(TASK_CATEGORY_COLLECTION)
+            userDocumentRef.collection(TASK_CATEGORY_COLLECTION)
                 .document(id)
                 .set(taskCategory)
         }

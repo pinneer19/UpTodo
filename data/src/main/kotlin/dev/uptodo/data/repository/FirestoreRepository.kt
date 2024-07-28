@@ -1,21 +1,20 @@
-package dev.uptodo.data.firebase
+package dev.uptodo.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.uptodo.data.model.TaskDto
+import dev.uptodo.data.firebase.model.TaskDto
+import dev.uptodo.data.firebase.util.toTaskDto
 import dev.uptodo.data.util.getResult
-import dev.uptodo.data.util.toTaskDto
 import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
-import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
-import dev.uptodo.domain.repository.TaskRepository
+import dev.uptodo.domain.repository.RemoteTaskRepository
 import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 
-class FirestoreTaskRepositoryImpl @Inject constructor(
+class FirestoreTaskRepository @Inject constructor(
     private val firebaseDb: FirebaseFirestore
-) : TaskRepository {
+) : RemoteTaskRepository {
     override suspend fun getTasks(): Result<Map<String, Task>> {
         return getResult<Map<String, Task>> {
             firebaseDb

@@ -15,3 +15,9 @@ interface TaskCategoryRepository {
 
     suspend fun updateTaskCategory(id: String, taskCategory: TaskCategory): Result<Unit>
 }
+
+interface OfflineTaskCategoryRepository : TaskCategoryRepository {
+    suspend fun initializeTaskCategories(taskCategories: List<TaskCategory>): Result<Unit>
+}
+
+interface RemoteTaskCategoryRepository : TaskCategoryRepository

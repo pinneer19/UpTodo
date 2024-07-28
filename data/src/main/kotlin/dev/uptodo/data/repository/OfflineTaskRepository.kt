@@ -1,19 +1,20 @@
-package dev.uptodo.data.local
+package dev.uptodo.data.repository
 
-import dev.uptodo.data.model.TaskDto
+import dev.uptodo.data.local.dao.TaskDao
+import dev.uptodo.data.local.entity.TaskEntity
+import dev.uptodo.data.local.util.toTaskEntity
 import dev.uptodo.data.util.getResult
-import dev.uptodo.data.util.toTaskDto
 import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskPriority
-import dev.uptodo.domain.repository.TaskRepository
+import dev.uptodo.domain.repository.OfflineTaskRepository
 import kotlinx.datetime.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
 
-internal class RoomTaskRepositoryImpl @Inject constructor(
+internal class OfflineTaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
-) : TaskRepository {
+) : OfflineTaskRepository {
     override suspend fun getTasks(): Result<Map<String, Task>> {
         return getResult<Map<String, Task>> {
             taskDao.getAllTasksWithCategories().associate { taskWithCategory ->
@@ -35,7 +36,7 @@ internal class RoomTaskRepositoryImpl @Inject constructor(
             val taskId = UUID.randomUUID().toString()
 
             taskDao.createTask(
-                TaskDto(
+                TaskEntity(
                     taskId, name, description, priority, categoryId, subtasks, deadline
                 )
             )
@@ -53,7 +54,7 @@ internal class RoomTaskRepositoryImpl @Inject constructor(
     override suspend fun updateTask(id: String, categoryId: String, task: Task): Result<Unit> {
         return getResult {
             taskDao.updateTask(
-                task.toTaskDto(id, categoryId)
+                task.toTaskEntity(id, categoryId)
             )
         }
     }
