@@ -10,7 +10,7 @@ import dev.uptodo.domain.repository.OfflineTaskCategoryRepository
 import java.util.UUID
 import javax.inject.Inject
 
-internal class OfflineTaskCategoryRepositoryImpl @Inject constructor(
+class OfflineTaskCategoryRepositoryImpl @Inject constructor(
     private val taskCategoryDao: TaskCategoryDao
 ) : OfflineTaskCategoryRepository {
 
@@ -26,7 +26,7 @@ internal class OfflineTaskCategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTaskCategories(): Result<Map<String, TaskCategory>> {
-        return getResult<Map<String, TaskCategory>> {
+        return getResult {
             taskCategoryDao.getAllTaskCategories().associate { entity ->
                 entity.id to entity.toTaskCategory()
             }
@@ -38,7 +38,7 @@ internal class OfflineTaskCategoryRepositoryImpl @Inject constructor(
         iconUri: String,
         iconTint: String
     ): Result<String> {
-        return getResult<String> {
+        return getResult {
             val taskCategoryId = UUID.randomUUID().toString()
 
             taskCategoryDao.createTaskCategory(

@@ -5,8 +5,9 @@ import dev.uptodo.domain.model.LoginInputValidationType.Valid
 import dev.uptodo.domain.model.LoginInputValidationType.IncorrectEmail
 import dev.uptodo.domain.model.LoginInputValidationType.EmptyField
 import dev.uptodo.domain.util.isEmail
+import javax.inject.Inject
 
-class ValidateLoginInputUseCase {
+class ValidateLoginInputUseCase @Inject constructor() {
     operator fun invoke(email: String, password: String): LoginInputValidationType {
         if (email.isEmpty() || password.isEmpty()) {
             return EmptyField

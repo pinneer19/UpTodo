@@ -13,7 +13,7 @@ internal interface LocalBindModule {
     fun bindTaskRepository(repository: OfflineTaskRepositoryImpl): OfflineTaskRepository
 
     @Binds
-    fun bindTaskRepository(
+    fun bindTaskCategoryRepository(
         repository: OfflineTaskCategoryRepositoryImpl
     ): OfflineTaskCategoryRepository
 }

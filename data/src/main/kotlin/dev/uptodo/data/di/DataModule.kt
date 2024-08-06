@@ -7,12 +7,15 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dev.uptodo.data.local.AppDatabase
+import dev.uptodo.data.local.dao.TaskDao
 import dev.uptodo.domain.repository.AccountService
 import javax.inject.Singleton
 
 @Module(includes = [FirebaseBindModule::class, LocalBindModule::class])
 class DataModule {
+
     @Provides
     @Singleton
     fun provideDatabase(context: Context): AppDatabase {
@@ -20,12 +23,19 @@ class DataModule {
     }
 
     @Provides
+    @Reusable
     internal fun provideCurrentUserDocumentReference(
         accountService: AccountService
     ): DocumentReference {
         return Firebase.firestore
             .collection(FIREBASE_USERS_COLLECTION)
             .document(accountService.currentUserId)
+    }
+
+    @Provides
+    @Reusable
+    internal fun provideTaskDao(appDatabase: AppDatabase): TaskDao {
+        return appDatabase.taskDao
     }
 
     companion object {

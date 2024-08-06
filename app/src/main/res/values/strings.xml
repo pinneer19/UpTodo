@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">UpTodo</string>
+    <string name="password">Password</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="email">Email</string>
+    <string name="email_placeholder">Enter your email</string>
+    <string name="reset_password_email">A password reset link has been sent to your email address. Please check your inbox and follow the instructions to reset your password</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="or">Or</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="register_account">Don\'t have an account? Register</string>
+    <string name="login_account">Already have an account? Login</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
+    <string name="reset_password">Password reset</string>
+    <string name="unexpected_credential">Unexpected type of credential</string>
+    <string name="too_many_requests">Too many requests!</string>
+    <string name="empty_field">Empty field!</string>
+    <string name="incorrect_email">Check email format!</string>
+    <string name="enter_reset_password_email">Enter email linked to your account</string>
+    <string name="reset">Reset</string>
+    <string name="check_email_format">Check email format!</string>
+    <string name="passwords_are_not_the_same">Passwords are not the same</string>
+    <string name="too_short_password">Too short password</string>
+    <string name="lower_case_missing">Password lower case missing</string>
+    <string name="password_upper_case_missing">Password upper case missing</string>
+    <string name="special_character_missing">Password special character missing</string>
+    <string name="numerals_missing">Password numerals missing</string>
+    <string name="retry">Retry</string>
 </resources>

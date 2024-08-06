@@ -26,3 +26,4 @@ rootProject.name = "UpTodo"
 include(":app")
 include(":domain")
 include(":data")
+include(":di")

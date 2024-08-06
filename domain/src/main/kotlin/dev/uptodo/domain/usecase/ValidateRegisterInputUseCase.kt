@@ -15,8 +15,9 @@ import dev.uptodo.domain.util.containsThreeLowerCase
 import dev.uptodo.domain.util.containsTwoNumerals
 import dev.uptodo.domain.util.containsTwoUpperCase
 import dev.uptodo.domain.util.isEmail
+import javax.inject.Inject
 
-class ValidateRegisterInputUseCase {
+class ValidateRegisterInputUseCase @Inject constructor() {
     operator fun invoke(
         email: String,
         password: String,

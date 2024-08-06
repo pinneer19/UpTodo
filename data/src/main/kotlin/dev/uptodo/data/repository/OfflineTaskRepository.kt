@@ -8,19 +8,24 @@ import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskPriority
 import dev.uptodo.domain.repository.OfflineTaskRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
 
-internal class OfflineTaskRepositoryImpl @Inject constructor(
+class OfflineTaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ) : OfflineTaskRepository {
-    override suspend fun getTasks(): Result<Map<String, Task>> {
-        return getResult<Map<String, Task>> {
-            taskDao.getAllTasksWithCategories().associate { taskWithCategory ->
-                val task = taskWithCategory.toTask()
-                taskWithCategory.task.id to task
+
+    override suspend fun getTasks(): Flow<List<Task>> = flow {
+        taskDao.getAllTasksWithCategories().onEach { taskList ->
+            val tasks = taskList.map { taskWithCategory ->
+                taskWithCategory.toTask()
             }
+            emit(tasks)
         }
     }
 
@@ -32,7 +37,7 @@ internal class OfflineTaskRepositoryImpl @Inject constructor(
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String> {
-        return getResult<String> {
+        return getResult {
             val taskId = UUID.randomUUID().toString()
 
             taskDao.createTask(

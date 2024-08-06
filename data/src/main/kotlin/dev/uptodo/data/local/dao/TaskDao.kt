@@ -7,6 +7,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import dev.uptodo.data.local.entity.TaskEntity
 import dev.uptodo.data.local.entity.TaskWithCategory
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -21,5 +22,5 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM tasks")
-    suspend fun getAllTasksWithCategories(): List<TaskWithCategory>
+    fun getAllTasksWithCategories(): Flow<List<TaskWithCategory>>
 }

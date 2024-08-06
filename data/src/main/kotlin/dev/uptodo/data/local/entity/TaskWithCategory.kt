@@ -8,7 +8,7 @@ import dev.uptodo.domain.model.Task
 data class TaskWithCategory(
     @Embedded val task: TaskEntity,
     @Relation(
-        parentColumn = "categoryId",
+        parentColumn = "category_id",
         entityColumn = "id"
     )
     val category: TaskCategoryEntity

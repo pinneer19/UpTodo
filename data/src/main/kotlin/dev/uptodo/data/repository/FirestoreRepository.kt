@@ -1,6 +1,7 @@
 package dev.uptodo.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.dataObjects
 import dev.uptodo.data.firebase.model.TaskDto
 import dev.uptodo.data.firebase.util.toTaskDto
 import dev.uptodo.data.util.getResult
@@ -8,6 +9,8 @@ import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskPriority
 import dev.uptodo.domain.repository.RemoteTaskRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
@@ -15,18 +18,11 @@ import javax.inject.Inject
 class FirestoreTaskRepository @Inject constructor(
     private val firebaseDb: FirebaseFirestore
 ) : RemoteTaskRepository {
-    override suspend fun getTasks(): Result<Map<String, Task>> {
-        return getResult<Map<String, Task>> {
-            firebaseDb
-                .collection(TASK_COLLECTION)
-                .get()
-                .await()
-                .documents.associate { doc ->
-                    doc.id to requireNotNull(
-                        doc.toObject(Task::class.java)
-                    )
-                }
-        }
+    override suspend fun getTasks(): Flow<List<Task>> {
+        return firebaseDb
+            .collection(TASK_COLLECTION)
+            .whereEqualTo("", "")
+            .dataObjects()
     }
 
     override suspend fun createTask(
@@ -37,7 +33,7 @@ class FirestoreTaskRepository @Inject constructor(
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String> {
-        return getResult<String> {
+        return getResult {
             val docRef = firebaseDb.collection(TASK_COLLECTION).document()
 
             getResult {

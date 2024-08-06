@@ -15,7 +15,7 @@ class FirestoreTaskCategoryRepository @Inject constructor(
     private val userDocumentRef: DocumentReference
 ) : RemoteTaskCategoryRepository {
     override suspend fun getTaskCategories(): Result<Map<String, TaskCategory>> {
-        return getResult<Map<String, TaskCategory>> {
+        return getResult {
            userDocumentRef
                 .collection(TASK_CATEGORY_COLLECTION)
                 .get()

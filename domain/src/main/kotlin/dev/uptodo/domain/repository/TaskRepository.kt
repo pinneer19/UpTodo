@@ -4,10 +4,11 @@ import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
 interface TaskRepository {
-    suspend fun getTasks(): Result<Map<String, Task>>
+    suspend fun getTasks(): Flow<List<Task>>
 
     suspend fun createTask(
         name: String,

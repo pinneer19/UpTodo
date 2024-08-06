@@ -2,6 +2,7 @@ package dev.uptodo.data.repository
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import dev.uptodo.domain.model.User
 import dev.uptodo.domain.repository.AccountService
@@ -25,14 +26,28 @@ class AccountServiceImpl @Inject constructor() : AccountService {
     override val currentUserId: String
         get() = requireNotNull(Firebase.auth.currentUser).uid
 
+    override suspend fun resetPassword(email: String) {
+        Firebase.auth.sendPasswordResetEmail(email).await()
+    }
+
     override fun hasUser(): Boolean = Firebase.auth.currentUser != null
 
-    override suspend fun login(email: String, password: String) {
+    override suspend fun loginWithEmail(email: String, password: String) {
         Firebase.auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun register(email: String, password: String) {
+    override suspend fun loginWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        Firebase.auth.signInWithCredential(credential).await()
+    }
+
+    override suspend fun registerWithEmail(email: String, password: String) {
         Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+    }
+
+    override suspend fun registerWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        Firebase.auth.currentUser!!.linkWithCredential(credential).await()
     }
 
     override suspend fun logout() {
