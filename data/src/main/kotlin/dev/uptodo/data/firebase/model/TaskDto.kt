@@ -15,13 +15,14 @@ internal data class TaskDto(
     val name: String,
     val description: String,
     val priority: TaskPriority,
-    val categoryId: String,
+    val categoryId: String?,
     val subtasks: List<Subtask>,
     val deadline: LocalDateTime,
+    val completed: Boolean = false
 ) {
     val json = Json.encodeToString(this)
 
     fun toTask(category: TaskCategory) = Task(
-        name, description, priority, category, subtasks, deadline,
+        name, description, priority, category, subtasks, deadline, completed
     )
 }

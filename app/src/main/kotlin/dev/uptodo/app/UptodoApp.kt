@@ -1,10 +1,8 @@
 package dev.uptodo.app
 
 import android.app.Application
-import androidx.compose.runtime.compositionLocalOf
 import dev.uptodo.app.di.AppComponent
 import dev.uptodo.app.di.DaggerAppComponent
-import dev.uptodo.domain.model.User
 
 class UpTodoApp : Application() {
 

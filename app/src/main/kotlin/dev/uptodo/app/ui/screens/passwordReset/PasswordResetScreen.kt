@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import dev.uptodo.app.R
 import dev.uptodo.app.ui.components.TextFieldComponent
 import dev.uptodo.app.ui.components.TopBarComponent
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.theme.UpTodoTheme
 
 @Composable
 fun PasswordResetScreen(

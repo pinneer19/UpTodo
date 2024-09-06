@@ -8,22 +8,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
 interface TaskRepository {
-    suspend fun getTasks(): Flow<List<Task>>
+    suspend fun getTasks(): List<Task>
 
     suspend fun createTask(
         name: String,
         description: String,
         priority: TaskPriority,
-        categoryId: String,
+        categoryId: String?,
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String>
 
     suspend fun deleteTask(id: String): Result<Unit>
 
-    suspend fun updateTask(id: String, categoryId: String, task: Task): Result<Unit>
+    suspend fun updateTask(id: String, categoryId: String?, task: Task): Result<Unit>
 }
 
-interface OfflineTaskRepository : TaskRepository
+interface OfflineTaskRepository : TaskRepository {
+    fun getCurrentDateTasks(): Flow<Map<String, Task>>
+    suspend fun updateTaskCompleteState(taskId: String): Result<Unit>
+}
 
 interface RemoteTaskRepository : TaskRepository

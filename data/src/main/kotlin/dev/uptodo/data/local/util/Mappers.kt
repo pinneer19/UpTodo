@@ -5,8 +5,15 @@ import dev.uptodo.data.local.entity.TaskEntity
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskCategory
 
-internal fun Task.toTaskEntity(id: String, categoryId: String) = TaskEntity(
-    id, name, description, priority, categoryId, subtasks, deadline
+internal fun Task.toTaskEntity(id: String, categoryId: String?) = TaskEntity(
+    id = id,
+    name = name,
+    description = description,
+    priority = priority,
+    subtasks = subtasks,
+    deadline = deadline,
+    completed = completed,
+    categoryId = categoryId,
 )
 
 internal fun TaskCategoryEntity.toTaskCategory() = TaskCategory(

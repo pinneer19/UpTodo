@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.uptodo.app.util.darken
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.theme.UpTodoTheme
 
 data class Category(val name: String, val iconUri: String, val iconTint: String)
 

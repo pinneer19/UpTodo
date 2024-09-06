@@ -5,20 +5,23 @@ import androidx.room.Relation
 import dev.uptodo.data.local.util.toTaskCategory
 import dev.uptodo.domain.model.Task
 
-data class TaskWithCategory(
+data class  TaskWithCategory(
     @Embedded val task: TaskEntity,
     @Relation(
         parentColumn = "category_id",
         entityColumn = "id"
     )
-    val category: TaskCategoryEntity
+    val category: TaskCategoryEntity?
 ) {
-    fun toTask() = Task(
-        name = task.name,
-        description = task.description,
-        priority = task.priority,
-        category = category.toTaskCategory(),
-        subtasks = task.subtasks,
-        deadline = task.deadline
-    )
+    fun toTask() = with(task) {
+        Task(
+            name = name,
+            description = description,
+            priority = priority,
+            category = categoryId?.let { category?.toTaskCategory() },
+            subtasks = subtasks,
+            deadline = deadline,
+            completed = completed
+        )
+    }
 }

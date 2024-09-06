@@ -1,56 +1,103 @@
 package dev.uptodo.app.ui.screens.home
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import dev.uptodo.domain.model.Task
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.theme.UpTodoTheme
 
 @Composable
-fun HomeScreen(tasks: List<Task>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp)
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Default.FilterList, null)
+fun HomeScreen(
+    uiState: HomeState,
+    onEvent: (HomeEvent) -> Unit,
+    onNavigateToCategoryScreen: () -> Unit
+) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showBottomSheet = true }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
-            Spacer(modifier = Modifier.weight(1f))
-            Text("Index")
-            Spacer(modifier = Modifier.weight(1f))
+        },
+        topBar = {
+            TopBarComponent(
+                title = "Index",
+                leadingIcon = Icons.Default.FilterList,
+                leadingAction = {}
+            )
         }
-        OutlinedTextField(value = "", onValueChange = {})
-        Button(onClick = { /*TODO*/ }) {
-            Text("Today")
-            Icon(Icons.Default.KeyboardArrowDown, null)
+    ) { innerPadding ->
+        val showListPlaceholder =
+            uiState.todoTasks.isEmpty() && uiState.completedTasks.isEmpty()
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            visible = showListPlaceholder,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            TaskListPlaceholder()
         }
 
-        TaskList(tasks = tasks, modifier = Modifier.fillMaxWidth())
+        AnimatedVisibility(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            visible = !showListPlaceholder,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            TaskList(
+                todoTasks = uiState.todoTasks,
+                completedTasks = uiState.completedTasks,
+                onEvent = onEvent,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        if (showBottomSheet) {
+            AddTaskModalBottomSheet(
+                onEvent = onEvent,
+                title = uiState.sheetTaskTitle,
+                priority = uiState.sheetTaskPriority.toInt(),
+                categoryId = uiState.sheetTaskCategoryId,
+                description = uiState.sheetTaskDescription,
+                onDismissRequest = { showBottomSheet = !showBottomSheet },
+                categories = uiState.categories,
+                onAddTaskCategory = onNavigateToCategoryScreen
+            )
+        }
     }
-
 }
 
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
     UpTodoTheme {
-        HomeScreen(emptyList())
+        HomeScreen(
+            uiState = HomeState(),
+            onEvent = {},
+            onNavigateToCategoryScreen = {}
+        )
     }
 }

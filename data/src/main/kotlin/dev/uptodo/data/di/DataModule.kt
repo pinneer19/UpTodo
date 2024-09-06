@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dev.uptodo.data.local.AppDatabase
+import dev.uptodo.data.local.dao.TaskCategoryDao
 import dev.uptodo.data.local.dao.TaskDao
 import dev.uptodo.domain.repository.AccountService
 import javax.inject.Singleton
@@ -36,6 +37,12 @@ class DataModule {
     @Reusable
     internal fun provideTaskDao(appDatabase: AppDatabase): TaskDao {
         return appDatabase.taskDao
+    }
+
+    @Provides
+    @Reusable
+    internal fun provideTaskCategoryDao(appDatabase: AppDatabase): TaskCategoryDao {
+        return appDatabase.taskCategoryDao
     }
 
     companion object {

@@ -9,10 +9,13 @@ import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskPriority
 import dev.uptodo.domain.repository.OfflineTaskRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toLocalDateTime
 import java.util.UUID
 import javax.inject.Inject
 
@@ -20,12 +23,24 @@ class OfflineTaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ) : OfflineTaskRepository {
 
-    override suspend fun getTasks(): Flow<List<Task>> = flow {
-        taskDao.getAllTasksWithCategories().onEach { taskList ->
-            val tasks = taskList.map { taskWithCategory ->
-                taskWithCategory.toTask()
+    override suspend fun getTasks(): List<Task> {
+        return taskDao.getAllTasksWithCategories()
+            .map { taskWithCategory -> taskWithCategory.toTask() }
+    }
+
+    override fun getCurrentDateTasks(): Flow<Map<String, Task>> {
+        val currentDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
+        val (startOfDay, endOfDay) = currentDate.atTime(0, 0) to currentDate.atTime(23, 59)
+
+        return taskDao.getTasksWithCategoriesByDate(startOfDay, endOfDay)
+            .map { taskList ->
+                taskList.associate { it.task.id to it.toTask() }
             }
-            emit(tasks)
+    }
+
+    override suspend fun updateTaskCompleteState(taskId: String): Result<Unit> {
+        return getResult {
+            taskDao.updateTaskCompleteState(taskId)
         }
     }
 
@@ -33,7 +48,7 @@ class OfflineTaskRepositoryImpl @Inject constructor(
         name: String,
         description: String,
         priority: TaskPriority,
-        categoryId: String,
+        categoryId: String?,
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String> {
@@ -42,7 +57,13 @@ class OfflineTaskRepositoryImpl @Inject constructor(
 
             taskDao.createTask(
                 TaskEntity(
-                    taskId, name, description, priority, categoryId, subtasks, deadline
+                    id = taskId,
+                    name = name,
+                    description = description,
+                    priority = priority,
+                    subtasks = subtasks,
+                    deadline = deadline,
+                    categoryId = categoryId
                 )
             )
 
@@ -56,7 +77,7 @@ class OfflineTaskRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateTask(id: String, categoryId: String, task: Task): Result<Unit> {
+    override suspend fun updateTask(id: String, categoryId: String?, task: Task): Result<Unit> {
         return getResult {
             taskDao.updateTask(
                 task.toTaskEntity(id, categoryId)

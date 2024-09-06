@@ -1,6 +1,6 @@
 package dev.uptodo.presentation.screens.task
 
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.theme.UpTodoTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

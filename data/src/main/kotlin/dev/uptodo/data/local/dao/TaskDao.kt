@@ -8,6 +8,7 @@ import androidx.room.Update
 import dev.uptodo.data.local.entity.TaskEntity
 import dev.uptodo.data.local.entity.TaskWithCategory
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDateTime
 
 @Dao
 interface TaskDao {
@@ -17,10 +18,20 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: TaskEntity)
 
+    @Query("UPDATE tasks SET completed = NOT completed WHERE id = :taskId")
+    suspend fun updateTaskCompleteState(taskId: String)
+
     @Query("DELETE FROM tasks where id = :id")
     suspend fun deleteTaskById(id: String)
 
     @Transaction
     @Query("SELECT * FROM tasks")
-    fun getAllTasksWithCategories(): Flow<List<TaskWithCategory>>
+    suspend fun getAllTasksWithCategories(): List<TaskWithCategory>
+
+    @Transaction
+    @Query("SELECT * FROM tasks WHERE deadline BETWEEN :startOfDay AND :endOfDay")
+    fun getTasksWithCategoriesByDate(
+        startOfDay: LocalDateTime,
+        endOfDay: LocalDateTime
+    ): Flow<List<TaskWithCategory>>
 }

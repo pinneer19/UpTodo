@@ -13,7 +13,7 @@ class CreateTaskUseCase @Inject constructor(
         name: String,
         description: String,
         priority: TaskPriority,
-        categoryId: String,
+        categoryId: String?,
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String> {

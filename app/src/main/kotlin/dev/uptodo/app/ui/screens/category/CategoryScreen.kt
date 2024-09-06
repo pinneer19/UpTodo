@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.uptodo.app.ui.screens.category.Colors
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.theme.UpTodoTheme
 
 @Composable
 fun CategoryScreen() {

@@ -11,6 +11,7 @@ import dev.uptodo.domain.model.TaskPriority
 import dev.uptodo.domain.repository.RemoteTaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
@@ -18,18 +19,18 @@ import javax.inject.Inject
 class FirestoreTaskRepository @Inject constructor(
     private val firebaseDb: FirebaseFirestore
 ) : RemoteTaskRepository {
-    override suspend fun getTasks(): Flow<List<Task>> {
+    override suspend fun getTasks(): List<Task> {
         return firebaseDb
             .collection(TASK_COLLECTION)
-            .whereEqualTo("", "")
-            .dataObjects()
+            .dataObjects<Task>()
+            .last()
     }
 
     override suspend fun createTask(
         name: String,
         description: String,
         priority: TaskPriority,
-        categoryId: String,
+        categoryId: String?,
         subtasks: List<Subtask>,
         deadline: LocalDateTime
     ): Result<String> {
@@ -58,7 +59,7 @@ class FirestoreTaskRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateTask(id: String, categoryId: String, task: Task): Result<Unit> {
+    override suspend fun updateTask(id: String, categoryId: String?, task: Task): Result<Unit> {
         return getResult {
             firebaseDb.collection(TASK_COLLECTION)
                 .document(id)

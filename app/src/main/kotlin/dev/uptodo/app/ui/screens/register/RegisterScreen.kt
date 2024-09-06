@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.uptodo.app.R
 import dev.uptodo.app.ui.components.AuthComponent
 import dev.uptodo.app.util.handleCredentialRetrieval
-import dev.uptodo.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.theme.UpTodoTheme
 import kotlinx.coroutines.launch
 
 @Composable

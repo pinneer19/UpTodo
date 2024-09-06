@@ -2,6 +2,8 @@ package dev.uptodo.data.di
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import dev.uptodo.data.local.dao.TaskCategoryDao
 import dev.uptodo.data.repository.OfflineTaskCategoryRepositoryImpl
 import dev.uptodo.data.repository.OfflineTaskRepositoryImpl
 import dev.uptodo.domain.repository.OfflineTaskCategoryRepository

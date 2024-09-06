@@ -27,8 +27,9 @@ data class TaskEntity(
     val name: String,
     val description: String,
     val priority: TaskPriority,
-    @ColumnInfo(name = "category_id", index = true)
-    val categoryId: String,
     val subtasks: List<Subtask>,
     val deadline: LocalDateTime,
+    val completed: Boolean = false,
+    @ColumnInfo(name = "category_id", index = true)
+    val categoryId: String? = null
 )

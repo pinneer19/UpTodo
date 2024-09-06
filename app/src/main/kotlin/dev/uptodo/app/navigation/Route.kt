@@ -31,6 +31,10 @@ sealed class Route {
     @Main
     @Serializable
     data object Home : Route()
+
+    @Main
+    @Serializable
+    data object AddTaskCategory : Route()
 }
 
 fun String.isAuthRoute(): Boolean = this in listOf(

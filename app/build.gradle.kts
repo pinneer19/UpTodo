@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "dev.uptodo.app"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.identity.googleid)
+
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(project(":domain"))
     implementation(project(":data"))

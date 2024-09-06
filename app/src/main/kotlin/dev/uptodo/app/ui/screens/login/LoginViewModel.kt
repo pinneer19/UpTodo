@@ -75,8 +75,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun navigate(navigateToScreen: () -> Unit) =
-        navigateToScreen()
+    private fun navigate(navigateToScreen: () -> Unit) = navigateToScreen()
 
     private fun tryToLogin(navigateToMainScreen: () -> Unit) {
         val email = _uiState.value.email

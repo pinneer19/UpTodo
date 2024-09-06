@@ -11,7 +11,7 @@ import dev.uptodo.app.di.auth.register.RegisterComponent
 import dev.uptodo.data.di.DataModule
 import javax.inject.Singleton
 
-@Component(modules = [DataModule::class])
+@Component(modules = [AppModule::class, DataModule::class])
 @Singleton
 interface AppComponent {
 
@@ -34,4 +34,3 @@ interface AppComponent {
         fun build(): AppComponent
     }
 }
-

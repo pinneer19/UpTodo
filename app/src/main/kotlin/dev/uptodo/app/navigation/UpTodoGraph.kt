@@ -84,7 +84,11 @@ fun UpTodoGraph(appComponent: AppComponent) {
                 onShowSnackbar = onShowSnackbar
             )
 
-            mainGraph(appComponent = appComponent)
+            mainGraph(
+                appComponent = appComponent,
+                navController = navController,
+                onShowSnackbar = onShowSnackbar
+            )
         }
     }
 }
