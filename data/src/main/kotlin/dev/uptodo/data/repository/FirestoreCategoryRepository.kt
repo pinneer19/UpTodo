@@ -1,9 +1,6 @@
 package dev.uptodo.data.repository
 
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import dev.uptodo.data.firebase.model.TaskCategoryDto
 import dev.uptodo.data.util.getResult
 import dev.uptodo.domain.model.TaskCategory

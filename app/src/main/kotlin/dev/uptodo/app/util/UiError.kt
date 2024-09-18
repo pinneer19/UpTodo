@@ -7,7 +7,7 @@ import androidx.compose.ui.res.stringResource
 import dev.uptodo.app.util.UiText.DynamicString
 import dev.uptodo.app.util.UiText.StringResource
 
-sealed class UiText() {
+sealed class UiText {
     data class DynamicString(val value: String): UiText()
 
     class StringResource(

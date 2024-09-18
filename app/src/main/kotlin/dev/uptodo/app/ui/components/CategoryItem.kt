@@ -1,5 +1,8 @@
-package dev.uptodo.app.ui.screens.home
+package dev.uptodo.app.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.uptodo.app.ui.screens.task.Category
 import dev.uptodo.app.util.darken
 
 @Composable
@@ -32,12 +34,16 @@ fun CategoryItem(
     tint: Color,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val defaultAnimationSpec: AnimationSpec<Color> = tween(durationMillis = 200)
 
     Column(
-        modifier = modifier.clickable(interactionSource = interactionSource, indication = null) { onClick() },
+        modifier = modifier.clickable(
+            interactionSource = interactionSource,
+            indication = null
+        ) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -57,21 +63,27 @@ fun CategoryItem(
             text = title,
             modifier = Modifier
                 .padding(top = 5.dp)
-                .then(
-                    if (selected) Modifier
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(vertical = 1.dp, horizontal = 8.dp)
-                    else Modifier
-                ),
-            color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                .clip(RoundedCornerShape(15.dp))
+                .background(
+                    color = animateColorAsState(
+                        targetValue = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                        animationSpec = defaultAnimationSpec,
+                        label = "animate selected item background"
+                    ).value
+                )
+                .padding(vertical = 1.dp, horizontal = 8.dp),
+            color = animateColorAsState(
+                targetValue = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+                animationSpec = defaultAnimationSpec,
+                label = "animate selected item text color"
+            ).value
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryItemPreview() {
+private fun CategoryItemPreview() {
     CategoryItem(
         title = "Test",
         imageVector = Icons.Default.Home,

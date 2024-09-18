@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,73 +40,78 @@ fun PasswordResetScreen(
     onEvent: (PasswordResetEvent) -> Unit,
     onNavigateUp: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TopBarComponent(
-            title = stringResource(id = R.string.reset_password),
-            leadingIcon = Icons.AutoMirrored.Default.ArrowBack,
-            leadingAction = onNavigateUp
-        )
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopBarComponent(
+                title = stringResource(id = R.string.reset_password),
+                leadingIcon = Icons.AutoMirrored.Default.ArrowBack,
+                leadingAction = onNavigateUp
+            )
+        }
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.weight(1f))
+            TextFieldComponent(
+                value = uiState.email,
+                label = stringResource(id = R.string.email),
+                placeholder = stringResource(R.string.enter_reset_password_email),
+                onValueChange = { onEvent(PasswordResetEvent.UpdateEmail(it)) },
+                trailingIcon = {
+                    if (uiState.email.isNotEmpty()) {
+                        IconButton(onClick = { onEvent(PasswordResetEvent.ClearEmail) }) {
+                            Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                        }
+                    }
+                }
+            )
 
-        TextFieldComponent(
-            value = uiState.email,
-            label = stringResource(id = R.string.email),
-            placeholder = stringResource(R.string.enter_reset_password_email),
-            onValueChange = { onEvent(PasswordResetEvent.UpdateEmail(it)) },
-            trailingIcon = {
-                if (uiState.email.isNotEmpty()) {
-                    IconButton(onClick = { onEvent(PasswordResetEvent.ClearEmail) }) {
+            Button(
+                onClick = { onEvent(PasswordResetEvent.SendResetRequest) },
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .width(125.dp)
+            ) {
+                Text(text = stringResource(R.string.reset))
+            }
+
+            AnimatedVisibility(
+                visible = uiState.message != null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(Color.LightGray)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+
+                    ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .weight(1f),
+                        textAlign = TextAlign.Justify,
+                        text = uiState.message?.asString().orEmpty(),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    IconButton(onClick = { onEvent(PasswordResetEvent.ClearMessage) }) {
                         Icon(imageVector = Icons.Default.Clear, contentDescription = null)
                     }
                 }
             }
-        )
 
-        Button(
-            onClick = { onEvent(PasswordResetEvent.SendResetRequest) },
-            modifier = Modifier
-                .padding(vertical = 20.dp)
-                .width(125.dp)
-        ) {
-            Text(text = stringResource(R.string.reset))
+            Spacer(modifier = Modifier.weight(1f))
         }
-
-        AnimatedVisibility(
-            visible = uiState.message != null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .clip(RoundedCornerShape(15.dp))
-                .background(Color.LightGray)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .weight(1f),
-                    textAlign = TextAlign.Justify,
-                    text = uiState.message?.asString().orEmpty(),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                IconButton(onClick = { onEvent(PasswordResetEvent.ClearMessage) }) {
-                    Icon(imageVector = Icons.Default.Clear, contentDescription = null)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
 

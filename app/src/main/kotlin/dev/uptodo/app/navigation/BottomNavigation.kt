@@ -4,6 +4,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 
-enum class BottomNavigation(val label: String, val icon: ImageVector, val route: Route) {
-    HOME("Home", Icons.Default.Home, Route.Home)
+enum class BottomNavigation(
+    val label: String,
+    val icon: ImageVector,
+    val route: Route
+) {
+    HOME("Home", Icons.Default.Home, Route.Home);
+
+    override fun toString(): String {
+        return this::class.qualifiedName.toString()
+    }
 }

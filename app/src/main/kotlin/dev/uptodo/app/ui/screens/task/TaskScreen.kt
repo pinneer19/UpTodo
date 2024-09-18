@@ -1,99 +1,120 @@
-package dev.uptodo.presentation.screens.task
+package dev.uptodo.app.ui.screens.task
 
-import dev.uptodo.app.ui.theme.UpTodoTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Repeat
-import androidx.compose.material.icons.filled.SubdirectoryArrowRight
-import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Flag
-import androidx.compose.material.icons.outlined.School
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import uptodo.ui.screens.task.TaskProperty
+import dev.uptodo.app.R
+import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.theme.UpTodoTheme
+import dev.uptodo.domain.model.TaskPriority
+import kotlinx.datetime.LocalDateTime
 
 @Composable
-fun TaskScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 24.dp, end = 24.dp, top = 15.dp, bottom = 30.dp),
-        verticalArrangement = Arrangement.spacedBy(
-            space = 30.dp,
-            alignment = Alignment.CenterVertically
-        )
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(imageVector = Icons.Default.Close, contentDescription = null)
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
+fun TaskScreen(
+    uiState: TaskState,
+    onEvent: (TaskEvent) -> Unit,
+    onNavigateUp: () -> Unit,
+    onNavigateToCategoryScreen: () -> Unit
+) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopBarComponent(
+                modifier = Modifier.padding(start = 12.dp),
+                title = stringResource(R.string.task_details),
+                leadingIcon = Icons.Default.Close,
+                leadingAction = onNavigateUp
+            )
+        },
+        floatingActionButton = {
+            ExpandableFab(
+                actions = listOf(
+                    FabAction(
+                        name = stringResource(R.string.delete_task),
+                        icon = Icons.Default.Delete,
+                        onAction = {
+                            onEvent(TaskEvent.DeleteTask)
+                            onNavigateUp()
+                        }
+                    ),
+                    FabAction(
+                        name = stringResource(R.string.save_task),
+                        icon = Icons.Default.Save,
+                        onAction = {
+                            onEvent(TaskEvent.EditTask)
+                            onNavigateUp()
+                        }
+                    )
+                )
+            )
         }
-
-        Component(
-            name = "Do math homework",
-            description = "Do chapter 2 to 5 for next week",
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        TaskProperty(
-            name = "Task time",
-            value = "Today at 16:45",
-            icon = Icons.Outlined.Timer,
-            onPropertyClicked = {}
-        )
-        TaskProperty(
-            name = "Task category",
-            value = "University",
-            icon = Icons.Outlined.Category,
-            valueIcon = Icons.Outlined.School,
-            onPropertyClicked = {}
-        )
-        TaskProperty(
-            name = "Task priority",
-            value = "Default",
-            icon = Icons.Outlined.Flag,
-            onPropertyClicked = {}
-        )
-        TaskProperty(
-            name = "Sub-Task",
-            value = "Add Sub-Task",
-            icon = Icons.Default.SubdirectoryArrowRight,
-            onPropertyClicked = {}
-        )
-
-        TextButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.Delete, null, Modifier.padding(end = 10.dp))
-            Text("Delete task")
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { /*TODO*/ }
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .consumeWindowInsets(contentPadding)
+                .imePadding()
+                .padding(start = 24.dp, end = 24.dp, top = 15.dp),
+            verticalArrangement = Arrangement.spacedBy(
+                space = 30.dp,
+                alignment = Alignment.CenterVertically
+            )
         ) {
-            Text(text = "Edit task")
+            TaskInfo(
+                name = uiState.name,
+                description = uiState.description,
+                modifier = Modifier.fillMaxWidth(),
+                onUpdateTaskName = { onEvent(TaskEvent.UpdateTaskName(it)) },
+                onUpdateTaskDescription = { onEvent(TaskEvent.UpdateTaskDescription(it)) }
+            )
+
+            DateTimeProperty(
+                deadline = uiState.deadline,
+                onEvent = onEvent
+            )
+
+            CategoryProperty(
+                categoryId = uiState.categoryId,
+                availableCategories = uiState.categories,
+                onSaveCategory = { selectedCategoryId ->
+                    onEvent(TaskEvent.UpdateTaskCategory(selectedCategoryId))
+                },
+                onAddCategory = onNavigateToCategoryScreen
+            )
+
+            PriorityProperty(
+                priority = uiState.priority,
+                onEvent = onEvent
+            )
+
+            SubtaskProperty(
+                subtasks = uiState.subtasks,
+                onUpdateSubtask = { index, subtaskName ->
+                    onEvent(
+                        TaskEvent.UpdateSubtask(
+                            index,
+                            subtaskName
+                        )
+                    )
+                },
+                onAddSubtask = { onEvent(TaskEvent.AddSubtask) },
+                onRemoveSubtask = { index -> onEvent(TaskEvent.RemoveSubtask(index)) }
+            )
         }
     }
 }
@@ -102,29 +123,17 @@ fun TaskScreen() {
 @Composable
 private fun TaskScreenPreview() {
     UpTodoTheme {
-        TaskScreen()
-    }
-}
-
-@Composable
-fun Component(
-    name: String,
-    description: String,
-    modifier: Modifier = Modifier,
-    icon: ImageVector = Icons.Outlined.Circle,
-    editIcon: ImageVector = Icons.Outlined.Edit,
-) {
-    Row(modifier = modifier) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.padding(end = 10.dp)
+        TaskScreen(
+            onEvent = {},
+            onNavigateUp = {},
+            onNavigateToCategoryScreen = {},
+            uiState = TaskState(
+                name = "Pizzza",
+                description = "Buy pizza",
+                deadline = LocalDateTime(2024, 11, 11, 11, 11),
+                subtasks = emptyList(),
+                priority = TaskPriority.DEFAULT
+            )
         )
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(text = name)
-            Text(text = description)
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(imageVector = editIcon, contentDescription = null)
     }
 }

@@ -20,6 +20,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
             }
 
             Firebase.auth.addAuthStateListener(authListener)
+
             awaitClose { Firebase.auth.removeAuthStateListener(authListener) }
         }
 

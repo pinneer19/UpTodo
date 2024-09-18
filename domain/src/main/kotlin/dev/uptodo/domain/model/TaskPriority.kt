@@ -10,6 +10,10 @@ enum class TaskPriority {
         return if (this == DEFAULT) null
         else ordinal + 1
     }
+
+    override fun toString(): String {
+        return this.toInt()?.toString() ?: "Default"
+    }
 }
 
 fun Int?.toTaskPriority() =

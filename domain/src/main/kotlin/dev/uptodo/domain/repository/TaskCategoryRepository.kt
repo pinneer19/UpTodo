@@ -1,6 +1,7 @@
 package dev.uptodo.domain.repository
 
 import dev.uptodo.domain.model.TaskCategory
+import kotlinx.coroutines.flow.Flow
 
 interface TaskCategoryRepository {
     suspend fun getTaskCategories(): Result<Map<String, TaskCategory>>
@@ -18,6 +19,12 @@ interface TaskCategoryRepository {
 
 interface OfflineTaskCategoryRepository : TaskCategoryRepository {
     suspend fun initializeTaskCategories(taskCategories: List<TaskCategory>): Result<Unit>
+
+    suspend fun getTaskCategoryIdByName(categoryName: String): Result<String>
+
+    fun getIconNames(): List<String>
+
+    fun getTaskCategoriesFlow(): Flow<Map<String, TaskCategory>>
 }
 
 interface RemoteTaskCategoryRepository : TaskCategoryRepository

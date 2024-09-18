@@ -41,6 +41,7 @@ import dev.uptodo.domain.model.Task
 fun TaskList(
     todoTasks: List<Pair<String, Task>>,
     completedTasks: List<Pair<String, Task>>,
+    onNavigateToTaskDetails: (String, Task) -> Unit,
     onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier,
     fabHeight: Dp = 56.dp
@@ -49,7 +50,7 @@ fun TaskList(
     var completedTasksExpanded by remember { mutableStateOf(true) }
 
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 16.dp),
         contentPadding = PaddingValues(bottom = 20.dp + fabHeight)
     ) {
         item(key = "Todo header") {
@@ -114,7 +115,8 @@ fun TaskList(
                     task = it.second,
                     modifier = Modifier.padding(bottom = 10.dp),
                     onCompleteTask = { onEvent(HomeEvent.ToggleTaskCompleteState(taskId = it.first)) },
-                    onDeleteTask = { onEvent(HomeEvent.DeleteTask(taskId = it.first)) }
+                    onDeleteTask = { onEvent(HomeEvent.DeleteTask(taskId = it.first)) },
+                    onItemClick = { onNavigateToTaskDetails(it.first, it.second) }
                 )
             }
         }
@@ -183,7 +185,8 @@ fun TaskList(
                         .padding(bottom = 10.dp)
                         .animateItem(),
                     onCompleteTask = { onEvent(HomeEvent.ToggleTaskCompleteState(taskId = it.first)) },
-                    onDeleteTask = { onEvent(HomeEvent.DeleteTask(taskId = it.first)) }
+                    onDeleteTask = { onEvent(HomeEvent.DeleteTask(taskId = it.first)) },
+                    onItemClick = { onNavigateToTaskDetails(it.first, it.second) }
                 )
             }
         }

@@ -12,12 +12,16 @@ fun HomeScreenStateful(
     navController: NavController,
     onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
 
     HomeScreen(
         uiState = uiState,
         onEvent = viewModel::onEvent,
-        onNavigateToCategoryScreen = { navController.navigate(Route.AddTaskCategory) }
+        onNavigateToCategoryScreen = { navController.navigate(Route.Category) },
+        onNavigateToTaskDetails = { id, task ->
+            navController.navigate(
+                Route.TaskDetails(id, task)
+            )
+        }
     )
 }

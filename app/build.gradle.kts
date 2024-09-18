@@ -93,6 +93,8 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
 
+    implementation(libs.compose.colorpicker)
+
     implementation(project(":domain"))
     implementation(project(":data"))
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import dev.uptodo.app.util.darken
 import dev.uptodo.app.util.decodeMaterialIcon
 import dev.uptodo.app.util.fromHex
+import dev.uptodo.app.util.toUiString
 import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
 import kotlinx.datetime.LocalDateTime
@@ -53,7 +54,7 @@ fun BoxScope.TaskItemContent(
             )
 
             Text(
-                text = "Today at ${deadline.hour}:${deadline.minute}",
+                text = deadline.toUiString(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -78,7 +79,7 @@ fun BoxScope.TaskItemContent(
                     tint = Color
                         .fromHex(category.iconTint)
                         .darken(0.6f),
-                    imageVector = requireNotNull(decodeMaterialIcon(category.iconUri)),
+                    imageVector = decodeMaterialIcon(category.iconUri),
                     contentDescription = null
                 )
 

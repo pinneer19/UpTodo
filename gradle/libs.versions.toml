@@ -13,20 +13,21 @@ javax-inject = "1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxCoroutinesCore = "1.9.0-RC"
+kotlinxCoroutinesCore = "1.9.0"
 kotlinxDatetime = "0.6.0"
 kotlinxSerializationJson = "1.7.1"
 lifecycle = "2.8.5"
 material = "1.12.0"
-composeBom = "2024.09.00"
+composeBom = "2024.09.01"
 jetbrainsKotlinJvm = "2.0.0"
 googleGmsGoogleServices = "4.4.2"
 ksp = "2.0.0-1.0.23"
 room = "2.6.1"
 datastore = "1.1.1"
-uiTextGoogleFonts = "1.7.0"
+uiTextGoogleFonts = "1.7.1"
 googleGmsGoogleServicesVersion = "4.4.2"
 firebaseAuth = "23.0.0"
+colorpicker = "1.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +66,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestoreVersion" }
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -21,12 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dev.uptodo.app.ui.components.TopBarComponent
 import dev.uptodo.app.ui.theme.UpTodoTheme
+import dev.uptodo.domain.model.Task
 
 @Composable
 fun HomeScreen(
     uiState: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    onNavigateToCategoryScreen: () -> Unit
+    onNavigateToCategoryScreen: () -> Unit,
+    onNavigateToTaskDetails: (String, Task) -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -71,7 +73,8 @@ fun HomeScreen(
                 todoTasks = uiState.todoTasks,
                 completedTasks = uiState.completedTasks,
                 onEvent = onEvent,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onNavigateToTaskDetails = onNavigateToTaskDetails
             )
         }
 
@@ -84,7 +87,10 @@ fun HomeScreen(
                 description = uiState.sheetTaskDescription,
                 onDismissRequest = { showBottomSheet = !showBottomSheet },
                 categories = uiState.categories,
-                onAddTaskCategory = onNavigateToCategoryScreen
+                onAddTaskCategory = {
+                    showBottomSheet = false
+                    onNavigateToCategoryScreen()
+                }
             )
         }
     }
@@ -97,7 +103,8 @@ private fun HomeScreenPreview() {
         HomeScreen(
             uiState = HomeState(),
             onEvent = {},
-            onNavigateToCategoryScreen = {}
+            onNavigateToCategoryScreen = {},
+            onNavigateToTaskDetails = { _, _ -> }
         )
     }
 }

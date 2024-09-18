@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import dev.uptodo.data.local.entity.TaskCategoryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskCategoryDao {
@@ -23,4 +24,10 @@ interface TaskCategoryDao {
 
     @Query("SELECT * FROM categories")
     suspend fun getAllTaskCategories(): List<TaskCategoryEntity>
+
+    @Query("SELECT * FROM categories")
+    fun getTaskCategoriesFlow(): Flow<List<TaskCategoryEntity>>
+
+    @Query("SELECT id FROM categories WHERE name = :name")
+    suspend fun getTaskCategoryId(name: String): String
 }

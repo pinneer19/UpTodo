@@ -7,25 +7,24 @@ import androidx.datastore.preferences.core.edit
 import dev.uptodo.domain.usecase.InitializeTaskCategoriesUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+
+private val DEFAULT_CATEGORIES_INSERTED = booleanPreferencesKey("DEFAULT_CATEGORIES_INSERTED")
 
 internal fun populateDatabase(
     dataStore: DataStore<Preferences>,
     initializeTaskCategoriesUseCase: InitializeTaskCategoriesUseCase
 ) {
     CoroutineScope(Dispatchers.IO).launch {
-        val DEFAULT_CATEGORIES_INSERTED = booleanPreferencesKey("DEFAULT_CATEGORIES_INSERTED")
+        dataStore.edit { preferences ->
+            val inserted = preferences[DEFAULT_CATEGORIES_INSERTED] ?: false
 
-        val preferences = dataStore.data.first()
+            if (!inserted) {
+                initializeTaskCategoriesUseCase()
 
-        val inserted = preferences[DEFAULT_CATEGORIES_INSERTED] ?: false
-        println(inserted)
-        if (!inserted) {
-            initializeTaskCategoriesUseCase()
-
-            dataStore.edit { prefs ->
-                prefs[DEFAULT_CATEGORIES_INSERTED] = true
+                dataStore.edit { prefs ->
+                    prefs[DEFAULT_CATEGORIES_INSERTED] = true
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package dev.uptodo.app.ui.screens.home
+package dev.uptodo.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Flag
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,8 +55,8 @@ fun PriorityItem(
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun PriorityItemPreview() {
+private fun PriorityItemPreview() {
     PriorityItem(priorityNumber = 1, onSelect = {}, selected = true)
 }

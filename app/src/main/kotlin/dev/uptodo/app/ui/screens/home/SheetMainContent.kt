@@ -30,8 +30,9 @@ fun SheetMainContent(
     showDatePicker: () -> Unit,
     showCategoryPicker: () -> Unit,
     showPriorityPicker: () -> Unit,
-    onEvent: (HomeEvent) -> Unit,
-    onHideSheet: () -> Unit
+    onUpdateSheetTaskTitle: (String) -> Unit,
+    onUpdateSheetTaskDescription: (String) -> Unit,
+    onCreateTask: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -45,7 +46,7 @@ fun SheetMainContent(
 
         TextField(
             value = title,
-            onValueChange = { onEvent(HomeEvent.UpdateSheetTaskTitle(it)) },
+            onValueChange = onUpdateSheetTaskTitle,
             placeholder = { Text(text = stringResource(R.string.title)) },
             modifier = Modifier.padding(vertical = 13.dp),
             colors = TextFieldDefaults.colors(
@@ -56,7 +57,7 @@ fun SheetMainContent(
 
         TextField(
             value = description,
-            onValueChange = { onEvent(HomeEvent.UpdateSheetTaskDescription(it)) },
+            onValueChange = onUpdateSheetTaskDescription,
             placeholder = { Text(text = stringResource(R.string.description)) },
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
@@ -83,10 +84,7 @@ fun SheetMainContent(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            IconButton(onClick = {
-                onEvent(HomeEvent.CreateTask)
-                onHideSheet()
-            }) {
+            IconButton(onClick = onCreateTask) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.Send,
                     contentDescription = null

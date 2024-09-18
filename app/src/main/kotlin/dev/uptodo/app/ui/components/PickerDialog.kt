@@ -1,4 +1,4 @@
-package dev.uptodo.app.util
+package dev.uptodo.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -35,7 +34,6 @@ fun PickerDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colorScheme.surface),
         ) {

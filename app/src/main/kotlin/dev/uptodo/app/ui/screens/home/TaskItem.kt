@@ -43,6 +43,7 @@ fun TaskItem(
     task: Task,
     onCompleteTask: () -> Unit,
     onDeleteTask: () -> Unit,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
@@ -66,7 +67,6 @@ fun TaskItem(
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         backgroundContent = {
-
             val (alignment: Alignment, icon: ImageVector?) =
                 when (swipeToDismissBoxState.dismissDirection) {
                     SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd to Icons.Outlined.Delete
@@ -80,7 +80,7 @@ fun TaskItem(
                 val initialX = when (swipeToDismissBoxState.dismissDirection) {
                     SwipeToDismissBoxValue.StartToEnd -> -500f
                     SwipeToDismissBoxValue.EndToStart -> 500f
-                    else -> 0f
+                    SwipeToDismissBoxValue.Settled -> 0f
                 }
 
                 iconOffsetX.snapTo(initialX)
@@ -117,7 +117,7 @@ fun TaskItem(
                 .heightIn(min = 72.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colorScheme.primaryContainer)
-                .clickable { },
+                .clickable { onItemClick() },
             contentAlignment = Alignment.Center
         ) {
             with(task) {
@@ -138,7 +138,7 @@ fun TaskItem(
 
 @Preview
 @Composable
-fun TaskPreview() {
+private fun TaskPreview() {
     UpTodoTheme {
         TaskItem(
             task = Task(
@@ -151,7 +151,8 @@ fun TaskPreview() {
                 completed = false
             ),
             onCompleteTask = {},
-            onDeleteTask = {}
+            onDeleteTask = {},
+            onItemClick = {}
         )
     }
 }

@@ -53,8 +53,8 @@ private const val iconsPackage = "androidx.compose.material."
  */
 fun decodeMaterialIcon(
     name: String,
-    default: ImageVector? = Icons.Default.BugReport
-): ImageVector? =
+    default: ImageVector = Icons.Default.BugReport
+): ImageVector =
     try {
         val parts = splitter.split(name)
         val className: String
@@ -123,6 +123,7 @@ fun decodeMaterialIcon(
 
             else -> throw IllegalArgumentException("Invalid icon-name '$name'")
         }
+
         val typeClass: Any = when (typeName) {
             "Icons.Filled" -> Icons.Filled
             "Icons.Outlined" -> Icons.Outlined
@@ -136,10 +137,13 @@ fun decodeMaterialIcon(
             "Icons.AutoMirrored.Sharp" -> Icons.AutoMirrored.Sharp
             else -> throw IllegalArgumentException("Invalid icon-name '$name'")
         }
-        Class.forName(className).getDeclaredMethod("get$iconName", typeClass.javaClass).invoke(
-            null,
-            typeClass
-        ) as ImageVector
+
+        requireNotNull(
+            Class.forName(className).getDeclaredMethod("get$iconName", typeClass.javaClass).invoke(
+                null,
+                typeClass
+            ) as ImageVector
+        )
     } catch (e: Throwable) {
         Log.d("icons", "Icon-error: ${e.message}")
         /* Note: if anything goes wrong:

@@ -24,7 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import dev.uptodo.app.R
-import dev.uptodo.app.util.PickerDialog
+import dev.uptodo.app.ui.components.CategoryItem
+import dev.uptodo.app.ui.components.PickerDialog
+import dev.uptodo.app.ui.components.PriorityItem
+import dev.uptodo.app.ui.components.TimePickerDialog
 import dev.uptodo.app.util.decodeMaterialIcon
 import dev.uptodo.app.util.fromHex
 import dev.uptodo.domain.model.TaskCategory
@@ -61,8 +64,16 @@ fun AddTaskModalBottomSheet(
             showDatePicker = { showDatePicker = !showDatePicker },
             showCategoryPicker = { showCategoryPicker = !showCategoryPicker },
             showPriorityPicker = { showPriorityPicker = !showPriorityPicker },
-            onEvent = onEvent,
-            onHideSheet = onDismissRequest
+            onUpdateSheetTaskTitle = { title -> onEvent(HomeEvent.UpdateSheetTaskTitle(title)) },
+            onUpdateSheetTaskDescription = { description ->
+                onEvent(
+                    HomeEvent.UpdateSheetTaskDescription(description)
+                )
+            },
+            onCreateTask = {
+                onEvent(HomeEvent.CreateTask)
+                onDismissRequest()
+            }
         )
 
         if (showDatePicker) {
@@ -141,17 +152,18 @@ fun AddTaskModalBottomSheet(
                     showCategoryPicker = false
                 },
                 pickerContent = {
-                    categories.entries.forEach {
-                        val category = it.value
-                        val imageVector = requireNotNull(decodeMaterialIcon(category.iconUri))
+                    categories.entries.forEach { entry ->
+                        with(entry.value) {
+                            val imageVector = decodeMaterialIcon(iconUri)
 
-                        CategoryItem(
-                            title = category.name,
-                            imageVector = imageVector,
-                            tint = Color.fromHex(category.iconTint),
-                            selected = selectedCategory == it.key,
-                            onClick = { selectedCategory = it.key },
-                        )
+                            CategoryItem(
+                                title = name,
+                                imageVector = imageVector,
+                                tint = Color.fromHex(iconTint),
+                                selected = selectedCategory == entry.key,
+                                onClick = { selectedCategory = entry.key },
+                            )
+                        }
                     }
 
                     CategoryItem(

@@ -2,7 +2,6 @@ package dev.uptodo.domain.repository
 
 import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
-import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
