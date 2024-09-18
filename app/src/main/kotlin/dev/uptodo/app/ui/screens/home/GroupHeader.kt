@@ -19,17 +19,17 @@ fun GroupHeader(
     onClick: () -> Unit,
     expanded: Boolean
 ) {
+    val rotation by animateFloatAsState(
+        targetValue = if (expanded) 0f else -180f,
+        animationSpec = tween(500),
+        label = "rotateArrowAnimation"
+    )
+
     Button(
         onClick = onClick,
         modifier = modifier
     ) {
         Text(header)
-
-        val rotation by animateFloatAsState(
-            targetValue = if (expanded) 0f else -180f,
-            animationSpec = tween(500),
-            label = "rotateArrowAnimation"
-        )
 
         Icon(
             imageVector = Icons.Default.KeyboardArrowDown,

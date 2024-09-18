@@ -1,18 +1,21 @@
 package dev.uptodo.app.ui.screens.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,18 +24,22 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import dev.uptodo.app.ui.theme.UpTodoTheme
 import dev.uptodo.domain.model.Task
 import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
-import dev.uptodo.app.ui.theme.UpTodoTheme
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -64,13 +71,17 @@ fun TaskItem(
         }
     )
 
+    var showSubtasks by remember { mutableStateOf(false) }
+
+    val itemStartToEndSwipeIcon = if (task.completed) Icons.Outlined.Clear else Icons.Outlined.Check
+
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         backgroundContent = {
             val (alignment: Alignment, icon: ImageVector?) =
                 when (swipeToDismissBoxState.dismissDirection) {
                     SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd to Icons.Outlined.Delete
-                    SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart to Icons.Outlined.Check
+                    SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart to itemStartToEndSwipeIcon
                     SwipeToDismissBoxValue.Settled -> Alignment.Center to null
                 }
 
@@ -111,26 +122,44 @@ fun TaskItem(
             }
         }
     ) {
-        Box(
+        Column(
             modifier = modifier
                 .fillMaxWidth()
-                .heightIn(min = 72.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .clickable { onItemClick() },
-            contentAlignment = Alignment.Center
+                .background(
+                    if (!task.completed) MaterialTheme.colorScheme.primaryContainer
+                    else MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.8f)
+                )
+                .clickable { onItemClick() }
+                .animateContentSize()
         ) {
-            with(task) {
-                if (!completed) {
-                    TaskItemContent(
-                        name = name,
-                        deadline = deadline,
-                        category = category,
-                        priority = priority
-                    )
-                } else {
-                    CompletedTaskItemContent(name = name)
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                with(task) {
+                    if (!completed) {
+                        TaskItemContent(
+                            name = name,
+                            deadline = deadline,
+                            category = category,
+                            priority = priority,
+                            isExpandable = subtasks.isNotEmpty(),
+                            showSubtasks = showSubtasks,
+                            onExpandItem = { showSubtasks = !showSubtasks }
+                        )
+                    } else {
+                        CompletedTaskItemContent(name = name)
+                    }
                 }
+            }
+
+            if (showSubtasks) {
+                SubtaskList(
+                    subtasks = task.subtasks,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 10.dp)
+                )
             }
         }
     }

@@ -21,10 +21,7 @@ internal fun populateDatabase(
 
             if (!inserted) {
                 initializeTaskCategoriesUseCase()
-
-                dataStore.edit { prefs ->
-                    prefs[DEFAULT_CATEGORIES_INSERTED] = true
-                }
+                preferences[DEFAULT_CATEGORIES_INSERTED] = true
             }
         }
     }

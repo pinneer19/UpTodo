@@ -35,7 +35,6 @@ fun TaskScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopBarComponent(
-                modifier = Modifier.padding(start = 12.dp),
                 title = stringResource(R.string.task_details),
                 leadingIcon = Icons.Default.Close,
                 leadingAction = onNavigateUp

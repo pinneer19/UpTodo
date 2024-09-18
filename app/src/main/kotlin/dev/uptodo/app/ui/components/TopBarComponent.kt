@@ -27,7 +27,7 @@ fun TopBarComponent(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 15.dp, end = 10.dp, bottom = 15.dp),
+            .padding(start = 20.dp, top = 15.dp, end = 10.dp, bottom = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         leadingIcon?.let { icon ->

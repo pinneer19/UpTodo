@@ -44,6 +44,7 @@ class TaskViewModel @Inject constructor(
             )
         )
     }
+
     val uiState: StateFlow<TaskState> = _uiState.asStateFlow()
 
     private var initialCategoryId: String? = null
@@ -154,7 +155,7 @@ class TaskViewModel @Inject constructor(
     }
 
     private fun editTask() {
-        val (taskWasChanged, task) = initialTaskWasChanged()
+        val (taskWasChanged, task) = isInitialTaskUpdated()
 
         if (taskWasChanged) {
             viewModelScope.launch {
@@ -167,19 +168,23 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    private fun initialTaskWasChanged(): Pair<Boolean, Task> {
-        _uiState.value.run {
-            val stateTask = Task(
+    private fun isInitialTaskUpdated(): Pair<Boolean, Task> {
+        val stateTask = getCurrentStateTask()
+
+        return (stateTask != initialTask || _uiState.value.categoryId != initialCategoryId) to stateTask
+    }
+
+    private fun getCurrentStateTask(): Task {
+        return with(_uiState.value) {
+            Task(
                 name = name,
                 description = description,
                 priority = priority,
                 category = initialTask.category,
-                subtasks = subtasks,
+                subtasks = subtasks.filter { it.name.isNotEmpty() },
                 deadline = deadline ?: LocalDateTime.default,
                 completed = initialTask.completed,
             )
-
-            return (stateTask != initialTask || categoryId != initialCategoryId) to stateTask
         }
     }
 
