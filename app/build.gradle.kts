@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.graphics.shapes)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.firebase.firestore)

@@ -1,4 +1,4 @@
-package dev.uptodo.ui.theme
+package dev.uptodo.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

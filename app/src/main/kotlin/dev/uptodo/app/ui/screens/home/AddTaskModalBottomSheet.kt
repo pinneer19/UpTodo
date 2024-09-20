@@ -28,8 +28,8 @@ import dev.uptodo.app.ui.components.CategoryItem
 import dev.uptodo.app.ui.components.PickerDialog
 import dev.uptodo.app.ui.components.PriorityItem
 import dev.uptodo.app.ui.components.TimePickerDialog
-import dev.uptodo.app.util.decodeMaterialIcon
-import dev.uptodo.app.util.fromHex
+import dev.uptodo.app.ui.util.decodeMaterialIcon
+import dev.uptodo.app.ui.util.fromHex
 import dev.uptodo.domain.model.TaskCategory
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)

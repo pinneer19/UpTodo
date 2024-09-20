@@ -28,9 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.uptodo.app.util.darken
-import dev.uptodo.app.util.decodeMaterialIcon
-import dev.uptodo.app.util.fromHex
+import dev.uptodo.app.ui.util.darken
+import dev.uptodo.app.ui.util.decodeMaterialIcon
+import dev.uptodo.app.ui.util.fromHex
 import dev.uptodo.app.util.toUiString
 import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority

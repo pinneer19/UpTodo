@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.uptodo.app.util.darken
+import dev.uptodo.app.ui.util.darken
 
 @Composable
 fun CategoryItem(

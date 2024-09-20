@@ -1,9 +1,9 @@
-package dev.uptodo.app.util
+package dev.uptodo.app.ui.util
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.ui.graphics.vector.ImageVector
 
 /** Regex to split icon name. */
 private val splitter = Regex("\\.")

@@ -3,8 +3,8 @@ package dev.uptodo.app.ui.screens.category
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.uptodo.app.util.decodeMaterialIcon
-import dev.uptodo.app.util.toHexString
+import dev.uptodo.app.ui.util.decodeMaterialIcon
+import dev.uptodo.app.ui.util.toHexString
 import dev.uptodo.domain.usecase.CreateTaskCategoryUseCase
 import dev.uptodo.domain.usecase.GetIconNamesUseCase
 import kotlinx.coroutines.Job

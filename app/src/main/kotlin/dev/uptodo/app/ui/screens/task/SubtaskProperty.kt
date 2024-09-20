@@ -28,7 +28,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.uptodo.app.R
-import dev.uptodo.app.util.keyboardAsState
+import dev.uptodo.app.ui.util.keyboardAsState
 import dev.uptodo.domain.model.Subtask
 
 @Composable

@@ -4,11 +4,11 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import dev.uptodo.app.MainActivity
-import dev.uptodo.app.di.main.home.HomeComponent
 import dev.uptodo.app.di.auth.login.LoginComponent
 import dev.uptodo.app.di.auth.passwordReset.PasswordResetComponent
 import dev.uptodo.app.di.auth.register.RegisterComponent
 import dev.uptodo.app.di.main.category.CategoryComponent
+import dev.uptodo.app.di.main.home.HomeComponent
 import dev.uptodo.app.di.main.task.TaskComponent
 import dev.uptodo.app.di.splash.SplashComponent
 import dev.uptodo.data.di.DataModule

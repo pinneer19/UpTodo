@@ -1,4 +1,4 @@
-package dev.uptodo.app.util
+package dev.uptodo.app.ui.util
 
 import android.view.ViewTreeObserver
 import androidx.compose.runtime.Composable

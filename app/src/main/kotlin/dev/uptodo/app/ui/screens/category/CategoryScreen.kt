@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import dev.uptodo.app.ui.components.CategoryItem
 import dev.uptodo.app.ui.theme.UpTodoTheme
-import dev.uptodo.app.util.decodeMaterialIcon
-import dev.uptodo.app.util.keyboardAsState
+import dev.uptodo.app.ui.util.decodeMaterialIcon
+import dev.uptodo.app.ui.util.keyboardAsState
 import kotlin.math.roundToInt
 
 @Composable

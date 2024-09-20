@@ -1,4 +1,4 @@
-package dev.uptodo.app.util
+package dev.uptodo.app.ui.util
 
 import androidx.compose.ui.graphics.Color
 import kotlin.math.absoluteValue

@@ -7,6 +7,7 @@ credentials = "1.3.0-rc01"
 dagger = "2.52"
 firebaseFirestoreVersion = "25.1.0"
 googleid = "1.1.1"
+graphicsShapes = "1.0.1"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 javax-inject = "1"
@@ -34,6 +35,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 #noinspection CredentialDependency
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+androidx-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "graphicsShapes" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

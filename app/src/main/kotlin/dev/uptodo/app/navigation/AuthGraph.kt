@@ -5,17 +5,17 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import dev.uptodo.app.di.AppComponent
-import dev.uptodo.app.ui.screens.login.LoginViewModel
-import dev.uptodo.app.ui.screens.register.RegisterViewModel
-import dev.uptodo.app.util.daggerViewModel
 import dev.uptodo.app.navigation.Route.AuthGraph
 import dev.uptodo.app.navigation.Route.Login
-import dev.uptodo.app.navigation.Route.Register
 import dev.uptodo.app.navigation.Route.PasswordReset
+import dev.uptodo.app.navigation.Route.Register
 import dev.uptodo.app.ui.screens.login.LoginScreenStateful
+import dev.uptodo.app.ui.screens.login.LoginViewModel
 import dev.uptodo.app.ui.screens.passwordReset.PasswordResetScreenStateful
 import dev.uptodo.app.ui.screens.passwordReset.PasswordResetViewModel
 import dev.uptodo.app.ui.screens.register.RegisterScreenStateful
+import dev.uptodo.app.ui.screens.register.RegisterViewModel
+import dev.uptodo.app.util.daggerViewModel
 
 fun NavGraphBuilder.authGraph(
     appComponent: AppComponent,

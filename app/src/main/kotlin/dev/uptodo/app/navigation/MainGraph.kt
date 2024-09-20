@@ -7,16 +7,16 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import dev.uptodo.app.di.AppComponent
 import dev.uptodo.app.navigation.Route.Category
-import dev.uptodo.app.navigation.Route.TaskDetails
 import dev.uptodo.app.navigation.Route.Home
 import dev.uptodo.app.navigation.Route.MainGraph
-import dev.uptodo.app.ui.screens.home.HomeScreenStateful
-import dev.uptodo.app.ui.screens.home.HomeViewModel
-import dev.uptodo.app.util.daggerViewModel
+import dev.uptodo.app.navigation.Route.TaskDetails
 import dev.uptodo.app.ui.screens.category.CategoryScreenStateful
 import dev.uptodo.app.ui.screens.category.CategoryViewModel
+import dev.uptodo.app.ui.screens.home.HomeScreenStateful
+import dev.uptodo.app.ui.screens.home.HomeViewModel
 import dev.uptodo.app.ui.screens.task.TaskScreenStateful
 import dev.uptodo.app.ui.screens.task.TaskViewModel
+import dev.uptodo.app.util.daggerViewModel
 import dev.uptodo.domain.model.Task
 import kotlin.reflect.typeOf
 

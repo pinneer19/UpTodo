@@ -23,10 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.uptodo.app.R
-import dev.uptodo.app.ui.components.PickerDialog
 import dev.uptodo.app.ui.components.CategoryItem
-import dev.uptodo.app.util.decodeMaterialIcon
-import dev.uptodo.app.util.fromHex
+import dev.uptodo.app.ui.components.PickerDialog
+import dev.uptodo.app.ui.util.decodeMaterialIcon
+import dev.uptodo.app.ui.util.fromHex
 import dev.uptodo.domain.model.TaskCategory
 
 @OptIn(ExperimentalLayoutApi::class)
