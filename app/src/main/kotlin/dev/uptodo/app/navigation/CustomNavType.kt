@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.navigation.NavType
 import dev.uptodo.domain.model.Task
+import dev.uptodo.domain.model.TaskCategory
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -22,6 +23,24 @@ object CustomNavType {
         }
 
         override fun serializeAsValue(value: Task): String {
+            return Uri.encode(Json.encodeToString(value))
+        }
+    }
+
+    val TaskCategoryNavType = object : NavType<TaskCategory?>(isNullableAllowed = true) {
+        override fun get(bundle: Bundle, key: String): TaskCategory? {
+            return Json.decodeFromString(bundle.getString(key) ?: return null)
+        }
+
+        override fun parseValue(value: String): TaskCategory {
+            return Json.decodeFromString(Uri.decode(value))
+        }
+
+        override fun put(bundle: Bundle, key: String, value: TaskCategory?) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+
+        override fun serializeAsValue(value: TaskCategory?): String {
             return Uri.encode(Json.encodeToString(value))
         }
     }

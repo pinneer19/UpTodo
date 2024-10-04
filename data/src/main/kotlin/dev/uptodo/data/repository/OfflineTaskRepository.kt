@@ -23,13 +23,17 @@ class OfflineTaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ) : OfflineTaskRepository {
 
+    private val currentDate: LocalDate = Clock.System
+        .now()
+        .toLocalDateTime(timeZone = TimeZone.currentSystemDefault())
+        .date
+
     override suspend fun getTasks(): List<Task> {
         return taskDao.getAllTasksWithCategories()
             .map { taskWithCategory -> taskWithCategory.toTask() }
     }
 
     override fun getCurrentDateTasks(): Flow<Map<String, Task>> {
-        val currentDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
         val (startOfDay, endOfDay) = currentDate.atTime(0, 0) to currentDate.atTime(23, 59)
 
         return taskDao.getTasksWithCategoriesByDate(startOfDay, endOfDay)
@@ -41,6 +45,14 @@ class OfflineTaskRepositoryImpl @Inject constructor(
     override suspend fun updateTaskCompleteState(taskId: String): Result<Unit> {
         return getResult {
             taskDao.updateTaskCompleteState(taskId)
+        }
+    }
+
+    override suspend fun getCurrentDateTasksAmount(): Result<Int> {
+        val (startOfDay, endOfDay) = currentDate.atTime(0, 0) to currentDate.atTime(23, 59)
+
+        return getResult {
+            taskDao.getTasksWithCategoriesAmountByDate(startOfDay, endOfDay)
         }
     }
 

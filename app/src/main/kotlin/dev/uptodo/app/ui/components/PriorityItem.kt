@@ -1,5 +1,8 @@
 package dev.uptodo.app.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -25,22 +29,40 @@ fun PriorityItem(
     selected: Boolean,
     onSelect: () -> Unit
 ) {
+    val defaultAnimationSpec: AnimationSpec<Color> = tween(durationMillis = 200)
+
+    val background = animateColorAsState(
+        targetValue = if (selected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.1f)
+        },
+        animationSpec = defaultAnimationSpec,
+        label = "animate selected priority background"
+    ).value
+
+    val targetColor = if (selected) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onBackground
+    }
+
     Column(
         modifier = Modifier
             .size(64.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(
-                if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                    alpha = 0.1f
-                )
-            )
+            .background(color = background)
             .clickable { onSelect() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             imageVector = Icons.Outlined.Flag,
-            tint = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
+            tint = animateColorAsState(
+                targetValue = targetColor,
+                animationSpec = defaultAnimationSpec,
+                label = "animate selected priority icon tint"
+            ).value,
             modifier = Modifier
                 .padding(bottom = 7.dp)
                 .align(Alignment.CenterHorizontally),
@@ -49,7 +71,11 @@ fun PriorityItem(
 
         Text(
             text = priorityNumber.toString(),
-            color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
+            color = animateColorAsState(
+                targetValue = targetColor,
+                animationSpec = defaultAnimationSpec,
+                label = "animate selected priority text color"
+            ).value,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
     }
@@ -58,5 +84,9 @@ fun PriorityItem(
 @Preview
 @Composable
 private fun PriorityItemPreview() {
-    PriorityItem(priorityNumber = 1, onSelect = {}, selected = true)
+    PriorityItem(
+        priorityNumber = 1,
+        onSelect = {},
+        selected = true
+    )
 }

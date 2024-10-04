@@ -4,10 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
+import dev.uptodo.app.ui.screens.passwordReset.viewmodel.PasswordResetViewModel
 
 @Composable
-fun PasswordResetScreenStateful(viewModel: PasswordResetViewModel, navController: NavController) {
-
+fun PasswordResetScreenStateful(
+    viewModel: PasswordResetViewModel,
+    navController: NavController
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     PasswordResetScreen(

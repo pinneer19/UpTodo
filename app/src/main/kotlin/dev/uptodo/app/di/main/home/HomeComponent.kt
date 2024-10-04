@@ -1,9 +1,10 @@
 package dev.uptodo.app.di.main.home
 
 import dagger.Subcomponent
-import dev.uptodo.app.ui.screens.home.HomeViewModel
+import dev.uptodo.app.ui.screens.home.viewmodel.HomeViewModel
+import dev.uptodo.app.ui.screens.home.bottomsheet.viewmodel.TaskSheetViewModel
 
-@Subcomponent(modules = [HomeModule::class])
+@Subcomponent
 @HomeScope
 interface HomeComponent {
 
@@ -12,5 +13,7 @@ interface HomeComponent {
         fun build(): HomeComponent
     }
 
-    fun getViewModel(): HomeViewModel
+    fun getHomeViewModel(): HomeViewModel
+
+    fun getTaskSheetViewModel(): TaskSheetViewModel
 }

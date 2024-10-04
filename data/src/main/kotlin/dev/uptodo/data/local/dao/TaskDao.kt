@@ -34,4 +34,11 @@ interface TaskDao {
         startOfDay: LocalDateTime,
         endOfDay: LocalDateTime
     ): Flow<List<TaskWithCategory>>
+
+    @Transaction
+    @Query("SELECT COUNT(*) FROM tasks WHERE deadline BETWEEN :startOfDay AND :endOfDay")
+    suspend fun getTasksWithCategoriesAmountByDate(
+        startOfDay: LocalDateTime,
+        endOfDay: LocalDateTime
+    ): Int
 }

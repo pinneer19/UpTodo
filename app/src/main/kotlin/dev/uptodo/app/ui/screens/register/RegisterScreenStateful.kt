@@ -5,18 +5,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import dev.uptodo.app.navigation.Route
+import dev.uptodo.app.ui.screens.register.viewmodel.RegisterViewModel
 
 @Composable
 fun RegisterScreenStateful(
     viewModel: RegisterViewModel,
     navController: NavController,
-    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     RegisterScreen(
         uiState = uiState,
-        onShowSnackbar = onShowSnackbar,
         onEvent = viewModel::onEvent,
         onNavigateToMainScreen = { navController.navigate(Route.MainGraph) },
         onNavigateToLogin = { navController.navigateUp() },

@@ -1,9 +1,9 @@
 package dev.uptodo.app.di.auth.passwordReset
 
 import dagger.Subcomponent
-import dev.uptodo.app.ui.screens.passwordReset.PasswordResetViewModel
+import dev.uptodo.app.ui.screens.passwordReset.viewmodel.PasswordResetViewModel
 
-@Subcomponent(modules = [PasswordResetModule::class])
+@Subcomponent
 @PasswordResetScope
 interface PasswordResetComponent {
 

@@ -20,6 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.uptodo.app.R
 import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.screens.task.component.TaskInfo
+import dev.uptodo.app.ui.screens.task.fab.ExpandableFab
+import dev.uptodo.app.ui.screens.task.fab.FabAction
+import dev.uptodo.app.ui.screens.task.property.CategoryProperty
+import dev.uptodo.app.ui.screens.task.property.DateTimeProperty
+import dev.uptodo.app.ui.screens.task.property.PriorityProperty
+import dev.uptodo.app.ui.screens.task.property.SubtaskProperty
+import dev.uptodo.app.ui.screens.task.viewmodel.TaskEvent
+import dev.uptodo.app.ui.screens.task.viewmodel.TaskState
 import dev.uptodo.app.ui.theme.UpTodoTheme
 import dev.uptodo.domain.model.TaskPriority
 import kotlinx.datetime.LocalDateTime

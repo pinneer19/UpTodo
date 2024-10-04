@@ -2,15 +2,16 @@ package dev.uptodo.app.di.main.task
 
 import dagger.BindsInstance
 import dagger.Subcomponent
-import dev.uptodo.app.ui.screens.task.TaskViewModel
+import dev.uptodo.app.ui.screens.task.viewmodel.TaskViewModel
 import dev.uptodo.domain.model.Task
 
-@Subcomponent(modules = [TaskModule::class])
+@Subcomponent
 @TaskScope
 interface TaskComponent {
 
     @Subcomponent.Builder
     interface Builder {
+
         @BindsInstance
         fun task(task: Task): Builder
 

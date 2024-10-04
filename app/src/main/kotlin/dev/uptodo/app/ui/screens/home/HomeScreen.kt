@@ -12,36 +12,71 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.uptodo.app.R
+import dev.uptodo.app.UpTodoApp
+import dev.uptodo.app.di.util.daggerViewModel
 import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.screens.home.bottomsheet.TaskModalBottomSheet
+import dev.uptodo.app.ui.screens.home.tasklist.TaskList
+import dev.uptodo.app.ui.screens.home.tasklist.TaskListPlaceholder
+import dev.uptodo.app.ui.screens.home.viewmodel.HomeEvent
+import dev.uptodo.app.ui.screens.home.viewmodel.HomeState
 import dev.uptodo.app.ui.theme.UpTodoTheme
+import dev.uptodo.app.ui.util.SnackbarController
+import dev.uptodo.app.ui.util.toUiText
+import dev.uptodo.app.util.helper.CheckNotificationPermission
 import dev.uptodo.domain.model.Task
+import dev.uptodo.domain.model.TaskCategory
 
 @Composable
 fun HomeScreen(
     uiState: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    onNavigateToCategoryScreen: () -> Unit,
+    onNavigateToCategoryScreen: (categoryId: String?, category: TaskCategory?) -> Unit,
     onNavigateToTaskDetails: (String, Task) -> Unit,
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val error = uiState.error
+    val context = LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            SnackbarController.sendMessageEvent(
+                message = it.asString(context)
+            )
+            onEvent(HomeEvent.ClearError)
+        }
+    }
+
+    CheckNotificationPermission(
+        onPermissionNotGranted = {
+            onEvent(
+                HomeEvent.UpdateError(
+                    message = R.string.enable_notification_permission.toUiText()
+                )
+            )
+        }
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(onClick = { showBottomSheet = true }) {
+            FloatingActionButton(
+                onClick = { onEvent(HomeEvent.ShowBottomSheet) }
+            ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         },
         topBar = {
             TopBarComponent(
-                title = "Index",
+                title = stringResource(R.string.index),
                 modifier = Modifier.padding(bottom = 20.dp)
             )
         }
@@ -77,19 +112,21 @@ fun HomeScreen(
             )
         }
 
-        if (showBottomSheet) {
-            AddTaskModalBottomSheet(
-                onEvent = onEvent,
-                title = uiState.sheetTaskTitle,
-                priority = uiState.sheetTaskPriority.toInt(),
-                categoryId = uiState.sheetTaskCategoryId,
-                description = uiState.sheetTaskDescription,
-                onDismissRequest = { showBottomSheet = !showBottomSheet },
-                categories = uiState.categories,
-                onAddTaskCategory = {
-                    showBottomSheet = false
-                    onNavigateToCategoryScreen()
-                }
+        if (uiState.showBottomSheet) {
+            val taskSheetViewModel = daggerViewModel {
+                (context.applicationContext as UpTodoApp).getAppComponent()
+                    .homeComponent()
+                    .build()
+                    .getTaskSheetViewModel()
+            }
+
+            val taskSheetUiState by taskSheetViewModel.uiState.collectAsState()
+
+            TaskModalBottomSheet(
+                uiState = taskSheetUiState,
+                onEvent = taskSheetViewModel::onEvent,
+                onHideBottomSheet = { onEvent(HomeEvent.HideBottomSheet) },
+                onNavigateToCategoryScreen = onNavigateToCategoryScreen,
             )
         }
     }
@@ -102,8 +139,8 @@ private fun HomeScreenPreview() {
         HomeScreen(
             uiState = HomeState(),
             onEvent = {},
-            onNavigateToCategoryScreen = {},
-            onNavigateToTaskDetails = { _, _ -> }
+            onNavigateToCategoryScreen = { _, _ -> },
+            onNavigateToTaskDetails = { _, _ -> },
         )
     }
 }

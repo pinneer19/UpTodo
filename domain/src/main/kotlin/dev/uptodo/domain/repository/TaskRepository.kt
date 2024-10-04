@@ -2,6 +2,7 @@ package dev.uptodo.domain.repository
 
 import dev.uptodo.domain.model.Subtask
 import dev.uptodo.domain.model.Task
+import dev.uptodo.domain.model.TaskCategory
 import dev.uptodo.domain.model.TaskPriority
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
@@ -25,7 +26,10 @@ interface TaskRepository {
 
 interface OfflineTaskRepository : TaskRepository {
     fun getCurrentDateTasks(): Flow<Map<String, Task>>
+
     suspend fun updateTaskCompleteState(taskId: String): Result<Unit>
+
+    suspend fun getCurrentDateTasksAmount(): Result<Int>
 }
 
 interface RemoteTaskRepository : TaskRepository

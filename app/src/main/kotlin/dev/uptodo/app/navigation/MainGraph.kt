@@ -6,41 +6,48 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import dev.uptodo.app.di.AppComponent
-import dev.uptodo.app.navigation.Route.Category
-import dev.uptodo.app.navigation.Route.Home
+import dev.uptodo.app.navigation.MainRoute.Category
+import dev.uptodo.app.navigation.MainRoute.Home
+import dev.uptodo.app.navigation.MainRoute.TaskDetails
 import dev.uptodo.app.navigation.Route.MainGraph
-import dev.uptodo.app.navigation.Route.TaskDetails
 import dev.uptodo.app.ui.screens.category.CategoryScreenStateful
-import dev.uptodo.app.ui.screens.category.CategoryViewModel
+import dev.uptodo.app.ui.screens.category.viewmodel.CategoryViewModel
 import dev.uptodo.app.ui.screens.home.HomeScreenStateful
-import dev.uptodo.app.ui.screens.home.HomeViewModel
+import dev.uptodo.app.ui.screens.home.viewmodel.HomeViewModel
 import dev.uptodo.app.ui.screens.task.TaskScreenStateful
-import dev.uptodo.app.ui.screens.task.TaskViewModel
-import dev.uptodo.app.util.daggerViewModel
+import dev.uptodo.app.ui.screens.task.viewmodel.TaskViewModel
+import dev.uptodo.app.di.util.daggerViewModel
 import dev.uptodo.domain.model.Task
+import dev.uptodo.domain.model.TaskCategory
 import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.mainGraph(
     appComponent: AppComponent,
     navController: NavController,
-    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     navigation<MainGraph>(startDestination = Home) {
         composable<Home> {
             val homeViewModel: HomeViewModel = daggerViewModel {
-                appComponent.homeComponent().build().getViewModel()
+                appComponent.homeComponent().build().getHomeViewModel()
             }
 
             HomeScreenStateful(
                 viewModel = homeViewModel,
                 navController = navController,
-                onShowSnackbar = onShowSnackbar
             )
         }
 
-        composable<Category> {
+        composable<Category>(
+            typeMap = mapOf(typeOf<TaskCategory?>() to CustomNavType.TaskCategoryNavType)
+        ) {
+            val args = it.toRoute<Category>()
+
             val categoryViewModel: CategoryViewModel = daggerViewModel {
-                appComponent.categoryComponent().build().getViewModel()
+                appComponent.categoryComponent()
+                    .category(args.category)
+                    .categoryId(args.id)
+                    .build()
+                    .getViewModel()
             }
 
             CategoryScreenStateful(

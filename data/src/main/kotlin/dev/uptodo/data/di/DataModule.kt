@@ -20,7 +20,7 @@ class DataModule {
     @Provides
     @Singleton
     fun provideDatabase(context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "app_db").build()
+        return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
     }
 
     @Provides
@@ -47,5 +47,6 @@ class DataModule {
 
     companion object {
         private const val FIREBASE_USERS_COLLECTION = "users"
+        private const val DATABASE_NAME = "app_db"
     }
 }

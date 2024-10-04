@@ -1,14 +1,15 @@
 package dev.uptodo.app.ui.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -19,14 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import dev.uptodo.app.R
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PickerDialog(
     title: String,
-    pickerContent: @Composable (FlowRowScope.() -> Unit),
+    pickerContent: LazyGridScope.() -> Unit,
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -48,13 +50,19 @@ fun PickerDialog(
                     .padding(start = 15.dp, end = 15.dp, bottom = 15.dp)
             )
 
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                maxItemsInEachRow = 3,
-                horizontalArrangement = Arrangement.SpaceAround,
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .animateContentSize(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 10.dp,
+                    alignment = Alignment.CenterHorizontally
+                ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                pickerContent()
+               pickerContent()
             }
 
             Row(
@@ -64,11 +72,11 @@ fun PickerDialog(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = "Cancel")
+                    Text(text = stringResource(id = R.string.cancel))
                 }
 
                 Button(onClick = onConfirm) {
-                    Text(text = "Edit")
+                    Text(text = stringResource(id = R.string.edit))
                 }
             }
         }

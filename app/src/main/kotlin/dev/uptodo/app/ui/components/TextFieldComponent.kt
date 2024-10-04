@@ -36,11 +36,16 @@ fun TextFieldComponent(
     Column(
         modifier = modifier
     ) {
-        Text(text = label, modifier = Modifier.padding(bottom = 8.dp))
+        Text(
+            text = label,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f)
+            ),
             textStyle = MaterialTheme.typography.bodyLarge,
             value = value,
             enabled = enabled,

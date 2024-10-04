@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import dev.uptodo.app.R
 import dev.uptodo.app.ui.components.TextFieldComponent
 import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.screens.passwordReset.viewmodel.PasswordResetEvent
+import dev.uptodo.app.ui.screens.passwordReset.viewmodel.PasswordResetState
 import dev.uptodo.app.ui.theme.UpTodoTheme
 
 @Composable
@@ -114,7 +116,6 @@ fun PasswordResetScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

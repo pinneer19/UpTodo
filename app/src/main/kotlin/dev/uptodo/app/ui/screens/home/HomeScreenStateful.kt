@@ -4,23 +4,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
-import dev.uptodo.app.navigation.Route
+import dev.uptodo.app.navigation.MainRoute
+import dev.uptodo.app.ui.screens.home.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreenStateful(
     viewModel: HomeViewModel,
-    navController: NavController,
-    onShowSnackbar: suspend (String, String?) -> Boolean
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     HomeScreen(
         uiState = uiState,
         onEvent = viewModel::onEvent,
-        onNavigateToCategoryScreen = { navController.navigate(Route.Category) },
+        onNavigateToCategoryScreen = { categoryId, category ->
+            navController.navigate(
+                MainRoute.Category(
+                    categoryId,
+                    category
+                )
+            )
+        },
         onNavigateToTaskDetails = { id, task ->
             navController.navigate(
-                Route.TaskDetails(id, task)
+                MainRoute.TaskDetails(id, task)
             )
         }
     )

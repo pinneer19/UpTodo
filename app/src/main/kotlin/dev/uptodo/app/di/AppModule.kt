@@ -7,20 +7,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import dagger.Module
 import dagger.Provides
+import dev.uptodo.app.util.Constants
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [AppBindModule::class])
 class AppModule {
 
     @Provides
     @Singleton
     fun provideDataStore(context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_FILE) }
+            produceFile = { context.preferencesDataStoreFile(Constants.DATASTORE_FILE) }
         )
-    }
-
-    companion object {
-        private const val DATASTORE_FILE = "app_prefs"
     }
 }

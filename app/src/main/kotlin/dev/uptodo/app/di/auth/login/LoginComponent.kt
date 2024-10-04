@@ -1,9 +1,9 @@
 package dev.uptodo.app.di.auth.login
 
 import dagger.Subcomponent
-import dev.uptodo.app.ui.screens.login.LoginViewModel
+import dev.uptodo.app.ui.screens.login.viewmodel.LoginViewModel
 
-@Subcomponent(modules = [LoginModule::class])
+@Subcomponent
 @LoginScope
 interface LoginComponent {
 

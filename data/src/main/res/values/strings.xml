@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasks_for_today">Tasks for today</string>
+    <plurals name="today_task_amount">
+        <item quantity="one">Good morning! You have %1$d task to complete today!</item>
+        <item quantity="other">Good morning! You have %1$d tasks to complete today!</item>
+    </plurals>
+    <string name="channel_name">Task Notifications</string>
+    <string name="channel_description">Receive notifications about your daily tasks.</string>
+</resources>

@@ -3,7 +3,7 @@ package dev.uptodo.app.di.splash
 import dagger.Subcomponent
 import dev.uptodo.app.ui.screens.splash.SplashViewModel
 
-@Subcomponent(modules = [SplashModule::class])
+@Subcomponent
 @SplashScope
 interface SplashComponent {
 

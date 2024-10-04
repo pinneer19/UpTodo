@@ -20,17 +20,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.Credential
 import dev.uptodo.app.R
-import dev.uptodo.app.util.handleCredentialRetrieval
+import dev.uptodo.app.util.helper.handleCredentialRetrieval
 import kotlinx.coroutines.launch
 
 @Composable
 fun AuthenticationButton(
     text: String,
+    authAction: (Credential) -> Unit,
+    onShowError: (String) -> Unit,
     modifier: Modifier = Modifier,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     painter: Painter = painterResource(id = R.drawable.ic_google),
-    authAction: (Credential) -> Unit,
-    onShowError: (String) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()

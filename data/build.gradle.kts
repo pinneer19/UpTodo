@@ -44,4 +44,6 @@ dependencies {
 
     api(libs.dagger)
     kapt(libs.dagger.compiler)
+
+    api(libs.androidx.work.runtime.ktx)
 }

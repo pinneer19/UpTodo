@@ -1,9 +1,9 @@
 package dev.uptodo.app.di.auth.register
 
 import dagger.Subcomponent
-import dev.uptodo.app.ui.screens.register.RegisterViewModel
+import dev.uptodo.app.ui.screens.register.viewmodel.RegisterViewModel
 
-@Subcomponent(modules = [RegisterModule::class])
+@Subcomponent
 @RegisterScope
 interface RegisterComponent {
 

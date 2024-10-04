@@ -36,18 +36,6 @@ private const val iconsPackage = "androidx.compose.material."
  * Icons.AutoMirrored.Sharp.<iconName>    --> androidx.compose.material.icons.automirrored.sharp
  * ```
  *
- * Also, don't forget to include in gradle:
- * ```
- * platform("androidx.compose:compose-bom:2024.02.01").also { compose ->
- *     implementation(compose)
- *     androidTestImplementation(compose)
- *     :
- *     implementation("androidx.compose.material:material-icons-core")
- *     implementation("androidx.compose.material:material-icons-extended")
- *     :
- * }
- * ```
- *
  * @param name Icon name.
  * @param default Default icon if [name] is invalid.
  */

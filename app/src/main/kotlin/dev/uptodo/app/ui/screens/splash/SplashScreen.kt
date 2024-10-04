@@ -8,18 +8,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import dev.uptodo.app.R
 import dev.uptodo.app.navigation.Route
+import dev.uptodo.app.util.Constants.SPLASH_TIMEOUT
 import kotlinx.coroutines.delay
 
-private const val SPLASH_TIMEOUT = 1000L
-
 @Composable
-fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
-
+fun SplashScreen(
+    viewModel: SplashViewModel,
+    navController: NavController
+) {
     LaunchedEffect(Unit) {
         delay(SPLASH_TIMEOUT)
+
         viewModel.onAppStart(
             onNavigateToAuthGraph = {
                 navController.navigate(Route.AuthGraph) {
@@ -40,7 +43,7 @@ fun SplashScreen(viewModel: SplashViewModel, navController: NavController) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_google),
-            contentDescription = null
+            contentDescription = stringResource(id = R.string.app_logo)
         )
     }
 }

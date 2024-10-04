@@ -33,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -62,31 +61,24 @@ fun AuthComponent(
     onUpdatePasswordVisibility: () -> Unit,
     onShowError: (String) -> Unit,
     modifier: Modifier = Modifier,
-    topBarLeadingIcon: ImageVector? = null,
     repeatedPassword: String? = null,
     isRepeatedPasswordVisible: Boolean? = null,
     onUpdateRepeatedPassword: ((String) -> Unit)? = null,
     onUpdateRepeatedPasswordVisibility: (() -> Unit)? = null,
     onForgotPassword: (() -> Unit)? = null,
-    onNavigateUp: (() -> Unit)? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val repeatPassword = repeatedPassword != null
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
             .imePadding()
             .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBarComponent(
-            title = title,
-            leadingIcon = topBarLeadingIcon,
-            leadingAction = onNavigateUp
-        )
-
         Spacer(modifier = Modifier.weight(1f))
 
         TextFieldComponent(
@@ -113,7 +105,8 @@ fun AuthComponent(
             value = password,
             label = stringResource(id = R.string.password),
             placeholder = stringResource(id = R.string.password_placeholder),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 25.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -154,15 +147,15 @@ fun AuthComponent(
                     }
                 ),
                 visualTransformation =
-                    if (isRepeatedPasswordVisible == true) VisualTransformation.None
-                    else PasswordVisualTransformation(),
+                if (isRepeatedPasswordVisible == true) VisualTransformation.None
+                else PasswordVisualTransformation(),
                 onValueChange = requireNotNull(onUpdateRepeatedPassword),
                 trailingIcon = {
                     IconButton(onClick = requireNotNull(onUpdateRepeatedPasswordVisibility)) {
                         Icon(
                             imageVector =
-                                if (isRepeatedPasswordVisible == true) Icons.Default.Visibility
-                                else Icons.Default.VisibilityOff,
+                            if (isRepeatedPasswordVisible == true) Icons.Default.Visibility
+                            else Icons.Default.VisibilityOff,
                             contentDescription = null
                         )
                     }
@@ -170,7 +163,8 @@ fun AuthComponent(
             )
         } else {
             TextButton(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .wrapContentWidth(align = Alignment.End)
                     .padding(top = 8.dp, bottom = 69.dp),
                 onClick = requireNotNull(onForgotPassword)
@@ -184,7 +178,8 @@ fun AuthComponent(
                 focusManager.clearFocus()
                 onAuth()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .heightIn(min = 48.dp)
         ) {
             Text(
@@ -194,7 +189,8 @@ fun AuthComponent(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(vertical = 30.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -211,7 +207,8 @@ fun AuthComponent(
                 onAuthWithGoogle(it)
             },
             onShowError = onShowError,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .heightIn(min = 48.dp),
         )
 
@@ -228,7 +225,8 @@ fun AuthComponent(
         exit = fadeOut()
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(color = Color.Transparent.copy(alpha = 0.3f)),
             contentAlignment = Alignment.Center
         ) {

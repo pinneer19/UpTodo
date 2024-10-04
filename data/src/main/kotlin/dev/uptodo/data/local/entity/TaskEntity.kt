@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
             entity = TaskCategoryEntity::class,
             parentColumns = ["id"],
             childColumns = ["category_id"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_NULL
         )
     ]
 )

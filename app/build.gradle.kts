@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.gradle.apk.uploader)
     kotlin("kapt")
 }
 
@@ -73,6 +74,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.graphics.shapes)
+    implementation(libs.compose.colorpicker)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.firebase.firestore)
@@ -93,8 +95,6 @@ dependencies {
     implementation(libs.identity.googleid)
 
     implementation(libs.androidx.datastore.preferences)
-
-    implementation(libs.compose.colorpicker)
 
     implementation(project(":domain"))
     implementation(project(":data"))

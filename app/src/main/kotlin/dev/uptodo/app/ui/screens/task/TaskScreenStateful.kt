@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
-import dev.uptodo.app.navigation.Route
+import dev.uptodo.app.navigation.MainRoute
+import dev.uptodo.app.ui.screens.task.viewmodel.TaskViewModel
 
 @Composable
 fun TaskScreenStateful(
@@ -17,6 +18,6 @@ fun TaskScreenStateful(
         uiState = uiState,
         onEvent = viewModel::onEvent,
         onNavigateUp = { navController.navigateUp() },
-        onNavigateToCategoryScreen = { navController.navigate(Route.Category) }
+        onNavigateToCategoryScreen = { navController.navigate(MainRoute.Category) }
     )
 }

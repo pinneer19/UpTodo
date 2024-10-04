@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.uptodo.app.R
 
 @Composable
 fun TopBarComponent(
@@ -35,7 +37,10 @@ fun TopBarComponent(
                 onClick = requireNotNull(leadingAction),
                 modifier = Modifier.padding(end = 15.dp)
             ) {
-                Icon(imageVector = icon, contentDescription = null)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = stringResource(id = R.string.top_bar_leading_icon)
+                )
             }
         }
 
@@ -49,7 +54,10 @@ fun TopBarComponent(
 
         trailingIcon?.let { icon ->
             IconButton(onClick = requireNotNull(trailingAction)) {
-                Icon(imageVector = icon, contentDescription = null)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = stringResource(id = R.string.top_bar_trailing_icon)
+                )
             }
         }
     }

@@ -7,17 +7,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,25 +23,35 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.uptodo.app.di.AppComponent
 import dev.uptodo.app.ui.screens.splash.SplashScreen
-import dev.uptodo.app.util.daggerViewModel
+import dev.uptodo.app.ui.util.ObserveAsEvents
+import dev.uptodo.app.ui.util.SnackbarController
+import dev.uptodo.app.di.util.daggerViewModel
+import dev.uptodo.app.util.extension.getSubstringBeforeRouteSymbols
+import dev.uptodo.app.util.extension.showBottomBar
 
 @Composable
 fun UpTodoGraph(appComponent: AppComponent) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
-    val onShowSnackbar: suspend (String, String?) -> Boolean = { message, action ->
-        snackbarHostState.showSnackbar(
-            message = message,
-            actionLabel = action,
-            duration = SnackbarDuration.Short,
-        ) == SnackbarResult.ActionPerformed
+
+    ObserveAsEvents(events = SnackbarController.events) { event ->
+        val result = snackbarHostState.showSnackbar(
+            message = event.message,
+            actionLabel = event.action?.name,
+            duration = SnackbarDuration.Short
+        )
+
+        if (result == SnackbarResult.ActionPerformed) {
+            event.action?.action?.invoke()
+        }
     }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val currentRoute = navBackStackEntry?.destination?.route ?: BottomNavigation.HOME.toString()
 
     val currentRouteTrimmed by remember(currentRoute) {
-        derivedStateOf { currentRoute.substringBefore("/") }
+        derivedStateOf { currentRoute.getSubstringBeforeRouteSymbols() }
     }
 
     val showBottomBar by remember(currentRouteTrimmed) {
@@ -63,38 +67,17 @@ fun UpTodoGraph(appComponent: AppComponent) {
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
-                NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ) {
-                    BottomNavigation.entries.forEach { navigationItem ->
-                        val isSelected by remember(currentRoute) {
-                            derivedStateOf { currentRoute == navigationItem.route::class.qualifiedName }
-                        }
-
-                        NavigationBarItem(
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                            ),
-                            selected = isSelected,
-                            label = { Text(navigationItem.label) },
-                            onClick = {
-                                if (currentRoute != navigationItem.route::class.qualifiedName) {
-                                    navController.navigate(navigationItem.route) {
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = navigationItem.icon,
-                                    contentDescription = navigationItem.label
-                                )
+                MainBottomBar(
+                    currentRoute = currentRoute,
+                    onNavigationBarItemClick = { itemRoute ->
+                        if (currentRoute != itemRoute::class.qualifiedName) {
+                            navController.navigate(itemRoute) {
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                        )
+                        }
                     }
-                }
+                )
             }
         }
     ) { innerPadding ->
@@ -104,7 +87,6 @@ fun UpTodoGraph(appComponent: AppComponent) {
             startDestination = Route.Splash
         ) {
             composable<Route.Splash> {
-
                 val splashViewModel = daggerViewModel {
                     appComponent.splashComponent().build().getViewModel()
                 }
@@ -114,14 +96,12 @@ fun UpTodoGraph(appComponent: AppComponent) {
 
             authGraph(
                 appComponent = appComponent,
-                navController = navController,
-                onShowSnackbar = onShowSnackbar
+                navController = navController
             )
 
             mainGraph(
                 appComponent = appComponent,
-                navController = navController,
-                onShowSnackbar = onShowSnackbar
+                navController = navController
             )
         }
     }

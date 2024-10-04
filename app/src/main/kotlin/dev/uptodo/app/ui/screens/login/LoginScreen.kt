@@ -6,8 +6,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,15 +21,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.uptodo.app.R
 import dev.uptodo.app.ui.components.AuthComponent
+import dev.uptodo.app.ui.components.TopBarComponent
+import dev.uptodo.app.ui.screens.login.viewmodel.LoginEvent
+import dev.uptodo.app.ui.screens.login.viewmodel.LoginState
 import dev.uptodo.app.ui.theme.UpTodoTheme
-import dev.uptodo.app.util.handleCredentialRetrieval
+import dev.uptodo.app.ui.util.SnackbarAction
+import dev.uptodo.app.ui.util.SnackbarController
+import dev.uptodo.app.ui.util.SnackbarEvent
+import dev.uptodo.app.util.helper.handleCredentialRetrieval
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     uiState: LoginState,
     onEvent: (LoginEvent) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     onNavigateToRegister: () -> Unit,
     onNavigateToMainScreen: () -> Unit,
     onNavigateToPasswordResetScreen: () -> Unit,
@@ -38,51 +45,56 @@ fun LoginScreen(
 
     LaunchedEffect(error) {
         error?.let {
-            onShowSnackbar(it.asString(context), null)
+            SnackbarController.sendMessageEvent(
+                message = it.asString(context)
+            )
             onEvent(LoginEvent.ClearError)
         }
     }
 
-    AuthComponent(
-        title = stringResource(id = R.string.login),
-        email = uiState.email,
-        password = uiState.password,
-        onEmailUpdate = { onEvent(LoginEvent.UpdateEmail(it)) },
-        onPasswordUpdate = { onEvent(LoginEvent.UpdatePassword(it)) },
-        onAuth = {
-            onEvent(
-                LoginEvent.TryToLogin(
-                    onNavigateToMainScreen = onNavigateToMainScreen
+    Scaffold(
+        topBar = {
+            TopBarComponent(title = stringResource(id = R.string.login))
+        }
+    ) { contentPadding ->
+        AuthComponent(
+            title = stringResource(id = R.string.login),
+            email = uiState.email,
+            password = uiState.password,
+            modifier = Modifier.padding(contentPadding),
+            onEmailUpdate = { onEvent(LoginEvent.UpdateEmail(it)) },
+            onPasswordUpdate = { onEvent(LoginEvent.UpdatePassword(it)) },
+            onAuth = {
+                onEvent(
+                    LoginEvent.TryToLogin(
+                        onNavigateToMainScreen = onNavigateToMainScreen
+                    )
                 )
-            )
-        },
-        authWithGoogleText = stringResource(id = R.string.sign_in_with_google),
-        onAuthWithGoogle = { credential ->
-            onEvent(
-                LoginEvent.LoginWithGoogle(
-                    credential = credential,
-                    onNavigateToMainScreen = onNavigateToMainScreen
+            },
+            authWithGoogleText = stringResource(id = R.string.continue_with_google),
+            onAuthWithGoogle = { credential ->
+                onEvent(
+                    LoginEvent.LoginWithGoogle(
+                        credential = credential,
+                        onNavigateToMainScreen = onNavigateToMainScreen
+                    )
                 )
-            )
-        },
-        swapAuthScreenText = stringResource(id = R.string.register_account),
-        onSwapAuthScreen = onNavigateToRegister,
-        onUpdatePasswordVisibility = { onEvent(LoginEvent.TogglePasswordVisibility) },
-        onClearEmail = { onEvent(LoginEvent.ClearEmail) },
-        onForgotPassword = {
-            onEvent(
-                LoginEvent.ForgotPassword(
-                    onNavigateToPasswordResetScreen = onNavigateToPasswordResetScreen
+            },
+            swapAuthScreenText = stringResource(id = R.string.register_account),
+            onSwapAuthScreen = onNavigateToRegister,
+            onUpdatePasswordVisibility = { onEvent(LoginEvent.TogglePasswordVisibility) },
+            onClearEmail = { onEvent(LoginEvent.ClearEmail) },
+            onForgotPassword = {
+                onEvent(
+                    LoginEvent.ForgotPassword(
+                        onNavigateToPasswordResetScreen = onNavigateToPasswordResetScreen
+                    )
                 )
-            )
-        },
-        isLoading = uiState.isLoading,
-        isPasswordVisible = uiState.isPasswordVisible,
-        onShowError = {
-            coroutineScope.launch {
-                val retry: Boolean = onShowSnackbar(it, context.getString(R.string.retry))
-
-                if (retry) {
+            },
+            isLoading = uiState.isLoading,
+            isPasswordVisible = uiState.isPasswordVisible,
+            onShowError = {
+                val snackbarAction: suspend () -> Unit = {
                     handleCredentialRetrieval(
                         context = context,
                         authAction = { credential ->
@@ -93,25 +105,37 @@ fun LoginScreen(
                                 )
                             )
                         },
-                        onShowError = { msg -> onShowSnackbar(msg, null) }
+                        onShowError = { msg -> SnackbarController.sendMessageEvent(msg) }
+                    )
+                }
+
+                coroutineScope.launch {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = it,
+                            action = SnackbarAction(
+                                name = context.getString(R.string.retry),
+                                action = snackbarAction
+                            )
+                        )
                     )
                 }
             }
-        }
-    )
+        )
 
-    AnimatedVisibility(
-        visible = uiState.isLoading,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Transparent.copy(alpha = 0.3f)),
-            contentAlignment = Alignment.Center
+        AnimatedVisibility(
+            visible = uiState.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Transparent.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
         }
     }
 }
@@ -122,7 +146,6 @@ private fun LoginScreenPreview() {
     UpTodoTheme {
         LoginScreen(
             uiState = LoginState(),
-            onShowSnackbar = { _, _ -> true },
             onNavigateToMainScreen = {},
             onEvent = {},
             onNavigateToRegister = {},
